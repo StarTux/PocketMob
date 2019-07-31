@@ -1,0 +1,25 @@
+main: com.cavetale.pocketmob.PocketMobPlugin
+name: PocketMob
+version: 0.1
+api-version: 1.13
+description: Capture mob in spawn eggs.
+author: StarTux
+website: https://cavetale.com
+depend: [Dirty, ItemMarker]
+softdepend: []
+commands:
+  pocketmob:
+    aliases: [pokemob]
+    description: PocketMob Command
+    permission: pocketmob.pocketmob
+    usage: |-
+      /pocketmob reload - Reload configs.
+      /pocketmob balls - Spawn a set of mob catchers.
+      /pocketmob menu - Open menu.
+permissions:
+  pocketmob.pocketmob:
+    description: Use /pocketmob
+    default: op
+  pocketmob.admin:
+    description: Use admin commands
+    default: op

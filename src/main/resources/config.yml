@@ -1,0 +1,12 @@
+modifiers:
+  creeper: 0.5
+  dolphin: 0.25
+  salmon: 0.1
+  enderman: 0.2
+  cave_spider: 0.4
+maxima:
+  monster: 0.9
+  water: 0.9
+  villager: 0.9
+  animal: 0.9
+  pet: 1.0
