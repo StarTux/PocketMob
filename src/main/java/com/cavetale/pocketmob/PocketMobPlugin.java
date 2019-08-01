@@ -294,7 +294,7 @@ public final class PocketMobPlugin extends JavaPlugin {
         double chance;
         if (player.equals(tameable.getOwner())) {
             chance = 1.0;
-        } else if (!tameable.isTamed()) {
+        } else if (tameable.isTamed()) {
             chance = 0.0;
         } else {
             chance = 0.25;
