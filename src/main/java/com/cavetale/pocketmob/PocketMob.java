@@ -15,7 +15,6 @@ public enum PocketMob {
     POLAR_BEAR(MobType.ANIMAL),
     RABBIT(MobType.ANIMAL),
     SHEEP(MobType.ANIMAL),
-    TURTLE(MobType.ANIMAL),
     // Monster
     BLAZE(MobType.MONSTER),
     CAVE_SPIDER(MobType.MONSTER),
@@ -65,7 +64,8 @@ public enum PocketMob {
     PUFFERFISH(MobType.WATER),
     SALMON(MobType.WATER),
     SQUID(MobType.WATER),
-    TROPICAL_FISH(MobType.WATER);
+    TROPICAL_FISH(MobType.WATER),
+    TURTLE(MobType.WATER);
 
     public final String key;
     public final EntityType entityType;
