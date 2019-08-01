@@ -58,7 +58,7 @@ PetBallItem:
   - ''
   - '&fRequires a direct hit.'
   - '&fWorks on pets which can be'
-  - '&ftamed. A pet owend by you'
+  - '&ftamed. A pet owned by you'
   - '&fwill always succeed. Untamed'
   - '&fpets have a low chance.'
   - '&fCannot catch pets owned by'
