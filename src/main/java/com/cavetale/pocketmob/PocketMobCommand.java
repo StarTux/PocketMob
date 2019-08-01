@@ -134,9 +134,10 @@ final class PocketMobCommand implements TabExecutor {
             Player player = requirePlayer(sender);
             for (MobType mobType : MobType.values()) {
                 ItemStack item = plugin.makePocketBall(mobType);
-                item.setAmount(64);
+                final int amount = 64;
+                item.setAmount(amount);
                 player.getInventory().addItem(item);
-                player.sendMessage(item.getAmount() + " " + mobType.displayName
+                player.sendMessage(amount + " " + mobType.displayName
                                    + " catchers given.");
             }
             return true;
@@ -144,15 +145,17 @@ final class PocketMobCommand implements TabExecutor {
         case POTIONS: {
             if (args.length != 0) return false;
             Player player = requirePlayer(sender);
+            final int amount = 64;
             for (MobType mobType : MobType.values()) {
                 ItemStack item = mobType.getPotionItem();
-                item.setAmount(64);
+                item.setAmount(amount);
                 player.getInventory().addItem(item);
                 item = mobType.getIngredientItem();
-                item.setAmount(64);
+                item.setAmount(amount);
                 player.getInventory().addItem(item);
             }
-            player.sendMessage("Spawned in some potions and ingredients.");
+            player.sendMessage("Spawned in " + amount
+                               + " potions and ingredients.");
             return true;
         }
         case MENU: {

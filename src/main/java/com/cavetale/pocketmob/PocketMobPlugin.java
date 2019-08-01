@@ -55,7 +55,7 @@ public final class PocketMobPlugin extends JavaPlugin {
     }
 
     double multiply(PocketMob pocketMob, double chance) {
-        double result = 1.0;
+        double result = chance;
         String k1 = "modifiers." + pocketMob.key;
         if (getConfig().isSet(k1)) {
             result *= getConfig().getDouble(k1);
@@ -73,7 +73,7 @@ public final class PocketMobPlugin extends JavaPlugin {
         if (!k3.equals(k4) && getConfig().isSet(k4)) {
             result = Math.min(result, getConfig().getDouble(k4));
         }
-        return result;
+        return Math.min(1.0, result);
     }
 
     // Eggify
@@ -183,7 +183,7 @@ public final class PocketMobPlugin extends JavaPlugin {
         double health = entity.getHealth();
         double maxHealth = entity
             .getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        double chance = 1.0 - health / maxHealth;
+        double chance = 1.0 - (health / maxHealth);
         chance = multiply(pocketMob, chance);
         double roll = random.nextDouble();
         boolean success = roll < chance;
