@@ -182,7 +182,13 @@ public final class PocketMobPlugin extends JavaPlugin {
         double health = entity.getHealth();
         double maxHealth = entity
             .getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        double chance = 1.0 - (health / maxHealth);
+        double chance;
+        if (maxHealth <= 1.0) {
+            // Small slimes
+            chance = 1.0; // configure?
+        } else {
+            chance = 1.0 - (health / maxHealth);
+        }
         chance = multiply(pocketMob, chance);
         double roll = random.nextDouble();
         boolean success = roll < chance;
@@ -237,7 +243,7 @@ public final class PocketMobPlugin extends JavaPlugin {
             chance = 1.0 - ((double) level / 5.0);
             chance = Math.max(0.05, chance);
         } else {
-            chance = 0.05;
+            chance = 1.0; // configure!
         }
         chance = multiply(pocketMob, chance);
         double roll = random.nextDouble();
@@ -251,7 +257,7 @@ public final class PocketMobPlugin extends JavaPlugin {
         }
         eggifyAndDrop(entity, pocketMob);
         act(player,
-            "&cCapturing %s failed (%d%% chance)",
+            "&aCapturing %s succeeded (%d%% chance)",
             niceEnum(entity.getType()),
             (int) (chance * 100.0));
         return true;
@@ -290,7 +296,8 @@ public final class PocketMobPlugin extends JavaPlugin {
         if (intensity <= 0.99) return false; // Direct hit!
         double chance;
         if (!(entity instanceof Tameable)) {
-            chance = 0.25;
+            // Only ocelots
+            chance = 1.0; // configure!
         } else {
             Tameable tameable = (Tameable) entity;
             if (player.equals(tameable.getOwner())) {

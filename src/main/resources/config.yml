@@ -6,3 +6,5 @@ maxima:
   villager: 0.9
   animal: 0.9
   pet: 1.0
+  wandering_trader: 0.2
+  ocelot: 0.25
