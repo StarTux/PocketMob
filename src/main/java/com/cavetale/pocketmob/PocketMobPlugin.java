@@ -143,7 +143,6 @@ public final class PocketMobPlugin extends JavaPlugin {
         ItemStack item = eggify(pocketMob, entity);
         if (item == null) return null;
         Item drop = entity.getWorld().dropItem(entity.getLocation(), item);
-        if (drop == null) return null;
         entity.remove();
         return drop;
     }

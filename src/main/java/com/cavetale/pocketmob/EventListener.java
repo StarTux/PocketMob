@@ -38,6 +38,7 @@ final class EventListener implements Listener {
         if (mobType == null) return;
         event.setCancelled(true);
         for (LivingEntity entity : event.getAffectedEntities()) {
+            if (!entity.isValid()) continue;
             PocketMob pocketMob = PocketMob.of(entity.getType());
             if (pocketMob == null) continue;
             if (pocketMob.mobType != mobType) return;
