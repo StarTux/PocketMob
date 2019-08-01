@@ -288,15 +288,18 @@ public final class PocketMobPlugin extends JavaPlugin {
                    @NonNull PocketMob pocketMob,
                    final double intensity) {
         if (intensity <= 0.99) return false; // Direct hit!
-        if (!(entity instanceof Tameable)) return false;
-        Tameable tameable = (Tameable) entity;
         double chance;
-        if (player.equals(tameable.getOwner())) {
-            chance = 1.0;
-        } else if (tameable.isTamed()) {
-            chance = 0.0;
-        } else {
+        if (!(entity instanceof Tameable)) {
             chance = 0.25;
+        } else {
+            Tameable tameable = (Tameable) entity;
+            if (player.equals(tameable.getOwner())) {
+                chance = 1.0;
+            } else if (tameable.isTamed()) {
+                chance = 0.0;
+            } else {
+                chance = 0.25;
+            }
         }
         chance = multiply(pocketMob, chance);
         double roll = random.nextDouble();
