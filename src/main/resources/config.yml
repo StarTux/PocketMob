@@ -1,5 +1,13 @@
+# Modifiers are multiplied with the chance (0-1) for the capture to
+# succeed. The original value depends on the mob type. For monsters,
+# it depends on remaining health, whereas for animals, it's the
+# intensity.
+# Accepted keys are PocketMob or MobType, in lowercase.
 modifiers:
   creeper: 1.0
+
+# This caps the above values. In other words, these are upper limits
+# for the chance to catch any mob or mob type.
 maxima:
   monster: 0.9
   water: 0.9
@@ -8,3 +16,7 @@ maxima:
   pet: 1.0
   wandering_trader: 0.2
   ocelot: 0.25
+
+# The velocity with which the mob catcher is thrown. Should be between
+# 1 and 2.
+throwSpeed: 1.25

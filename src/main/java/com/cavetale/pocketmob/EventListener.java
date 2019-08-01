@@ -15,6 +15,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 /**
  * We listen for events pertaining to the PocketBall. Mob egg spawning
@@ -62,7 +63,10 @@ final class EventListener implements Listener {
         MobType mobType = MobType.of(mobName);
         if (mobType == null) return;
         item.setAmount(item.getAmount() - 1);
-        ThrownPotion potion = player.launchProjectile(ThrownPotion.class);
+        double speed = plugin.getConfig().getDouble("throwSpeed");
+        Vector dir = player.getLocation().getDirection()
+            .normalize().multiply(speed);
+        ThrownPotion potion = player.launchProjectile(ThrownPotion.class, dir);
         plugin.metadata.set(potion, plugin.META_TYPE, mobType.key);
     }
 
