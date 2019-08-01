@@ -52,7 +52,7 @@ enum MobType {
         switch (this) {
         case MONSTER:  return new PotionData(PotionType.INSTANT_DAMAGE);
         case WATER:    return new PotionData(PotionType.WATER_BREATHING);
-        case VILLAGER: return new PotionData(PotionType.LUCK);
+        case VILLAGER: return new PotionData(PotionType.WEAKNESS);
         case ANIMAL:   return new PotionData(PotionType.INSTANT_HEAL);
         case PET:      return new PotionData(PotionType.SLOWNESS);
         default: throw new IllegalArgumentException("" + this);

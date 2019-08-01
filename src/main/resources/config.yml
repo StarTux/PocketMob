@@ -1,9 +1,5 @@
 modifiers:
-  creeper: 0.5
-  dolphin: 0.25
-  salmon: 1.0
-  enderman: 0.5
-  cave_spider: 0.4
+  creeper: 1.0
 maxima:
   monster: 0.9
   water: 0.9
