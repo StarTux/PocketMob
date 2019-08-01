@@ -20,6 +20,11 @@ permissions:
   pocketmob.pocketmob:
     description: Use /pocketmob
     default: op
+  pocketmob.stack:
+    description: Use /pocketmob stack
+    default: op
   pocketmob.admin:
     description: Use admin commands
     default: op
+    children:
+      pocketmob.stack: true

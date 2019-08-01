@@ -20,6 +20,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Villager;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,7 +31,7 @@ public final class PocketMobPlugin extends JavaPlugin {
     ConfigurationSection resourcesConfig;
     final Random random = new Random(System.nanoTime());
     static final String META_TYPE = "EggType";
-    static final String ITEM_TAG = "pocket_ball";
+    static final String ITEM_TAG = "pocketmob:ball";
     static final String ITEM_MOB = "mob_type";
 
     @Override
@@ -88,22 +89,27 @@ public final class PocketMobPlugin extends JavaPlugin {
         player.sendActionBar(txt);
     }
 
-    ItemStack makePocketBall(@NonNull MobType mobType) {
-        String id = getResourcesConfig().getString("PocketBallItem.Id");
-        String tex = getResourcesConfig().getString("PocketBallItem.Texture");
+    ItemStack makeItem(@NonNull ConfigurationSection conf) {
+        final String id = conf.getString("Id");
+        final String tex = conf.getString("Texture");
         ItemStack item = Dirty.makeSkull(id, tex);
-        ItemMarker.setCustomId(item, ITEM_TAG);
-        ItemMarker.setMarker(item, ITEM_MOB, mobType.key);
         ItemMeta meta = item.getItemMeta();
-        ConfigurationSection conf = getResourcesConfig()
-            .getConfigurationSection(mobType.displayName + "BallItem");
-        String name = conf.getString("Name");
-        List<String> lore = conf.getStringList("Lore").stream()
+        final String name = conf.getString("Name");
+        final List<String> lore = conf.getStringList("Lore").stream()
             .map(this::fmt)
             .collect(Collectors.toList());
         meta.setDisplayName(fmt(name));
         meta.setLore(lore);
         item.setItemMeta(meta);
+        return item;
+    }
+
+    ItemStack makePocketBall(@NonNull MobType mobType) {
+        ConfigurationSection conf = getResourcesConfig()
+            .getConfigurationSection(mobType.displayName + "BallItem");
+        ItemStack item = makeItem(conf);
+        ItemMarker.setCustomId(item, ITEM_TAG);
+        ItemMarker.setMarker(item, ITEM_MOB, mobType.key);
         return item;
     }
 
