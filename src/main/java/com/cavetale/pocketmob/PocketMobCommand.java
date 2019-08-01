@@ -42,7 +42,7 @@ final class PocketMobCommand implements TabExecutor {
         public final String node;
 
         Perm() {
-            node = "pocketmob" + name().toLowerCase();
+            node = "pocketmob." + name().toLowerCase();
         }
 
         boolean has(Permissible entity) {

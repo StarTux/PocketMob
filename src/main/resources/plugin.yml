@@ -27,4 +27,5 @@ permissions:
     description: Use admin commands
     default: op
     children:
+      pocketmob.pocketmob: true
       pocketmob.stack: true
