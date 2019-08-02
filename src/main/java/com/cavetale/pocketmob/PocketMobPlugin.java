@@ -120,7 +120,9 @@ public final class PocketMobPlugin extends JavaPlugin {
                   "Dimension", "PortalCooldown", "UUIDMost", "UUIDLeast",
                   "UUID", "Passengers", "HurtByTimestamp", "WorldUUIDLeast",
                   "WorldUUIDMost", "Spigot.ticksLived", "Bukkit.updateLevel",
-                  "Leashed", "Leash", "APX", "APY", "APZ")
+                  "Leashed", "Leash", "APX", "APY", "APZ", "Brain",
+                  "SleepingX", "SleepingY", "SleepingZ", "Paper.Origin",
+                  "Paper.SpawnReason")
             .forEach(t -> entityTag.remove(t));
         Map<String, Object> itemTag = new HashMap<>();
         itemTag.put("EntityTag", entityTag);
