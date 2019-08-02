@@ -240,6 +240,7 @@ public final class PocketMobPlugin extends JavaPlugin {
         double chance;
         if (entity instanceof Villager) {
             Villager villager = (Villager) entity;
+            if (villager.isSleeping()) return false;
             int level = villager.getVillagerLevel();
             chance = 1.0 - ((double) level / 5.0);
             chance = Math.max(0.05, chance);
