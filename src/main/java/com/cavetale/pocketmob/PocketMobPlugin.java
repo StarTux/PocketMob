@@ -59,19 +59,19 @@ public final class PocketMobPlugin extends JavaPlugin {
         if (getConfig().isSet(k1)) {
             result *= getConfig().getDouble(k1);
         }
-        String k2 = "modifiers." + pocketMob.mobType.key;
-        if (!k1.equals(k2) && getConfig().isSet(k2)) {
-            result *= getConfig().getDouble(k2);
-        }
+        // String k2 = "modifiers." + pocketMob.mobType.key;
+        // if (!k1.equals(k2) && getConfig().isSet(k2)) {
+        //     result *= getConfig().getDouble(k2);
+        // }
         //
         String k3 = "maxima." + pocketMob.key;
         if (getConfig().isSet(k3)) {
             result = Math.min(result, getConfig().getDouble(k3));
         }
-        String k4 = "maxima." + pocketMob.mobType.key;
-        if (!k3.equals(k4) && getConfig().isSet(k4)) {
-            result = Math.min(result, getConfig().getDouble(k4));
-        }
+        // String k4 = "maxima." + pocketMob.mobType.key;
+        // if (!k3.equals(k4) && getConfig().isSet(k4)) {
+        //     result = Math.min(result, getConfig().getDouble(k4));
+        // }
         return Math.min(1.0, result);
     }
 
@@ -165,7 +165,7 @@ public final class PocketMobPlugin extends JavaPlugin {
                             @NonNull LivingEntity entity,
                             @NonNull PocketMob pocketMob,
                             final double intensity) {
-        switch (pocketMob.mobType) {
+        switch (pocketMob.mobTypes.iterator().next()) {
         case MONSTER: return hitMonster(player, entity, pocketMob, intensity);
         case WATER: return hitWaterMob(player, entity, pocketMob, intensity);
         case VILLAGER: return hitVillager(player, entity, pocketMob, intensity);

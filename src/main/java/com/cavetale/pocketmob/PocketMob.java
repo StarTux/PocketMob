@@ -1,60 +1,67 @@
 package com.cavetale.pocketmob;
 
+import java.util.EnumSet;
 import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
 public enum PocketMob {
-    // Animal
+    // Animals (Non-Fish)
     BAT(MobType.ANIMAL),
     CHICKEN(MobType.ANIMAL),
     COW(MobType.ANIMAL),
     FOX(MobType.ANIMAL),
+    MOOSHROOM(EntityType.MUSHROOM_COW, MobType.ANIMAL),
     PANDA(MobType.ANIMAL),
     PIG(MobType.ANIMAL),
     POLAR_BEAR(MobType.ANIMAL),
     RABBIT(MobType.ANIMAL),
     SHEEP(MobType.ANIMAL),
-    // Monster
+    // Undead Monster
+    DROWNED(MobType.MONSTER, MobType.UNDEAD),
+    HUSK(MobType.MONSTER, MobType.UNDEAD),
+    PHANTOM(MobType.MONSTER, MobType.UNDEAD),
+    SKELETON(MobType.MONSTER, MobType.UNDEAD),
+    STRAY(MobType.MONSTER, MobType.UNDEAD),
+    WITHER_SKELETON(MobType.MONSTER, MobType.UNDEAD),
+    ZOMBIE(MobType.MONSTER, MobType.UNDEAD),
+    ZOMBIE_PIGMAN(EntityType.PIG_ZOMBIE, MobType.MONSTER, MobType.UNDEAD),
+    ZOMBIE_VILLAGER(MobType.MONSTER, MobType.UNDEAD),
+    // Spider Monster
+    CAVE_SPIDER(MobType.MONSTER, MobType.SPIDER),
+    SPIDER(MobType.MONSTER, MobType.SPIDER),
+    ENDERMITE(MobType.MONSTER, MobType.SPIDER),
+    SILVERFISH(MobType.MONSTER, MobType.SPIDER),
+    // Water Monster
+    ELDER_GUARDIAN(MobType.MONSTER, MobType.WATER),
+    GUARDIAN(MobType.MONSTER, MobType.WATER),
+    // Living Monster
     BLAZE(MobType.MONSTER),
-    CAVE_SPIDER(MobType.MONSTER),
     CREEPER(MobType.MONSTER),
-    DROWNED(MobType.MONSTER),
-    ELDER_GUARDIAN(MobType.MONSTER),
     ENDERMAN(MobType.MONSTER),
-    ENDERMITE(MobType.MONSTER),
     EVOKER(MobType.MONSTER),
     GHAST(MobType.MONSTER),
-    GUARDIAN(MobType.MONSTER),
-    HUSK(MobType.MONSTER),
     MAGMA_CUBE(MobType.MONSTER),
-    PHANTOM(MobType.MONSTER),
     PILLAGER(MobType.MONSTER),
     RAVAGER(MobType.MONSTER),
     SHULKER(MobType.MONSTER),
-    SILVERFISH(MobType.MONSTER),
-    SKELETON(MobType.MONSTER),
     SLIME(MobType.MONSTER),
-    SPIDER(MobType.MONSTER),
-    STRAY(MobType.MONSTER),
     VEX(MobType.MONSTER),
     VINDICATOR(MobType.MONSTER),
     WITCH(MobType.MONSTER),
-    WITHER_SKELETON(MobType.MONSTER),
-    ZOMBIE(MobType.MONSTER),
-    ZOMBIE_VILLAGER(MobType.MONSTER),
-    // Pet
-    CAT(MobType.PET),
-    DONKEY(MobType.PET),
-    HORSE(MobType.PET),
-    LLAMA(MobType.PET),
-    MULE(MobType.PET),
-    OCELOT(MobType.PET),
-    PARROT(MobType.PET),
-    SKELETON_HORSE(MobType.PET),
-    TRADER_LLAMA(MobType.PET),
-    WOLF(MobType.PET),
-    ZOMBIE_HORSE(MobType.PET),
+    // Undead Pet
+    ZOMBIE_HORSE(MobType.PET, MobType.UNDEAD),
+    SKELETON_HORSE(MobType.PET, MobType.UNDEAD),
+    // Animal Pet
+    CAT(MobType.PET, MobType.ANIMAL),
+    DONKEY(MobType.PET, MobType.ANIMAL),
+    HORSE(MobType.PET, MobType.ANIMAL),
+    LLAMA(MobType.PET, MobType.ANIMAL),
+    MULE(MobType.PET, MobType.ANIMAL),
+    OCELOT(MobType.PET, MobType.ANIMAL),
+    PARROT(MobType.PET, MobType.ANIMAL, MobType.AIR),
+    TRADER_LLAMA(MobType.PET, MobType.ANIMAL),
+    WOLF(MobType.PET, MobType.ANIMAL),
     // Villager
     VILLAGER(MobType.VILLAGER),
     WANDERING_TRADER(MobType.VILLAGER),
@@ -70,13 +77,23 @@ public enum PocketMob {
     public final String key;
     public final EntityType entityType;
     public final Material spawnEggType;
-    public final MobType mobType;
+    public final EnumSet<MobType> mobTypes;
 
-    PocketMob(@NonNull final MobType mobType) {
+    PocketMob(@NonNull final EntityType entityType,
+              @NonNull final MobType mobType,
+              final MobType... mobTypes) {
+        this.key = name().toLowerCase();
+        this.entityType = entityType;
+        this.spawnEggType = Material.valueOf(name() + "_SPAWN_EGG");
+        this.mobTypes = EnumSet.of(mobType, mobTypes);
+    }
+
+    PocketMob(@NonNull final MobType mobType,
+              final MobType... mobTypes) {
         this.key = name().toLowerCase();
         this.entityType = EntityType.valueOf(name());
         this.spawnEggType = Material.valueOf(name() + "_SPAWN_EGG");
-        this.mobType = mobType;
+        this.mobTypes = EnumSet.of(mobType, mobTypes);
     }
 
     public static PocketMob of(@NonNull EntityType entityType) {

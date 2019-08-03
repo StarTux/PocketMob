@@ -8,27 +8,15 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 enum MobType {
-    /**
-     * Monsters can be caught single file with a chance depending on
-     * their health.
-     */
+    // Main Categories
     MONSTER,
-    /**
-     * Water mobs can be caught in bulk with a low chance.
-     */
-    WATER,
-    /**
-     * Villagers are caught single file, with a mediocre chance.
-     */
-    VILLAGER,
-    /**
-     * Animals can be caught in bulk with a high chance.
-     */
     ANIMAL,
-    /**
-     * Owned pets can be caught in bulk, with a guaranteed capture.
-     * Unowned pets are caught single file with a slim chance.
-     */
+    VILLAGER,
+    WATER,
+    // Specialty
+    UNDEAD,
+    SPIDER,
+    AIR,
     PET;
 
     public final String key;
