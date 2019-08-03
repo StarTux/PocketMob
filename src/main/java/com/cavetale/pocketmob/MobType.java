@@ -12,11 +12,13 @@ enum MobType {
     MONSTER,
     ANIMAL,
     VILLAGER,
+    ILLAGER,
     WATER,
     // Specialty
     UNDEAD,
     SPIDER,
     AIR,
+    NETHER,
     PET;
 
     public final String key;
