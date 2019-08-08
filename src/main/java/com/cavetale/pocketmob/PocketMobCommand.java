@@ -125,20 +125,20 @@ final class PocketMobCommand implements TabExecutor {
         case RELOAD: {
             if (args.length != 0) return false;
             plugin.reloadConfig();
-            plugin.resourcesConfig = null;
+            plugin.itemsConfig = null;
             sender.sendMessage("PocketMob configs reloaded.");
             return true;
         }
         case BALLS: {
             if (args.length != 0) return false;
             Player player = requirePlayer(sender);
-            for (MobType mobType : MobType.values()) {
-                ItemStack item = plugin.makePocketBall(mobType);
+            for (MobCatcher mobCatcher : MobCatcher.values()) {
+                ItemStack item = plugin.makeMobCatcher(mobCatcher);
                 final int amount = 64;
                 item.setAmount(amount);
                 player.getInventory().addItem(item);
-                player.sendMessage(amount + " " + mobType.displayName
-                                   + " catchers given.");
+                player.sendMessage(amount + " " + mobCatcher.displayName
+                                   + " mob catchers given.");
             }
             return true;
         }
@@ -146,11 +146,11 @@ final class PocketMobCommand implements TabExecutor {
             if (args.length != 0) return false;
             Player player = requirePlayer(sender);
             final int amount = 64;
-            for (MobType mobType : MobType.values()) {
-                ItemStack item = mobType.getPotionItem();
+            for (MobCatcher mobCatcher : MobCatcher.values()) {
+                ItemStack item = mobCatcher.getPotionItem();
                 item.setAmount(amount);
                 player.getInventory().addItem(item);
-                item = mobType.getIngredientItem();
+                item = mobCatcher.getIngredientItem();
                 item.setAmount(amount);
                 player.getInventory().addItem(item);
             }
@@ -237,10 +237,10 @@ final class PocketMobCommand implements TabExecutor {
         Merchant merchant = plugin.getServer()
             .createMerchant(ChatColor.BLUE + "PocketMob Crafting");
         ArrayList<MerchantRecipe> recipes = new ArrayList<>();
-        for (MobType mobType : MobType.values()) {
-            ItemStack potion = mobType.getPotionItem();
-            ItemStack ingredient = mobType.getIngredientItem();
-            ItemStack result = plugin.makePocketBall(mobType);
+        for (MobCatcher mobCatcher : MobCatcher.values()) {
+            ItemStack potion = mobCatcher.getPotionItem();
+            ItemStack ingredient = mobCatcher.getIngredientItem();
+            ItemStack result = plugin.makeMobCatcher(mobCatcher);
             MerchantRecipe recipe = new MerchantRecipe(result, 999);
             recipe.setExperienceReward(false);
             recipe.setIngredients(Arrays.asList(potion, ingredient));
