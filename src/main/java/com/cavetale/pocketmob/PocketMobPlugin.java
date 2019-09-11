@@ -1,7 +1,7 @@
 package com.cavetale.pocketmob;
 
 import com.cavetale.dirty.Dirty;
-import com.cavetale.itemmarker.ItemMarker;
+import com.cavetale.worldmarker.ItemMarker;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -103,7 +103,7 @@ public final class PocketMobPlugin extends JavaPlugin {
         ConfigurationSection conf = getItemsConfig()
             .getConfigurationSection(mobCatcher.configKey);
         ItemStack item = makeItem(conf);
-        ItemMarker.setCustomId(item, mobCatcher.customId);
+        ItemMarker.setId(item, mobCatcher.customId);
         return item;
     }
 

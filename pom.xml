@@ -75,10 +75,10 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- ItemMarker -->
+    <!-- WorldMarker -->
     <dependency>
-      <groupId>com.cavetale.itemmarker</groupId>
-      <artifactId>itemmarker</artifactId>
+      <groupId>com.cavetale.worldmarker</groupId>
+      <artifactId>worldmarker</artifactId>
       <version>0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <optional>true</optional>

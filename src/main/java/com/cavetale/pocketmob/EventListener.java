@@ -1,7 +1,7 @@
 package com.cavetale.pocketmob;
 
-import com.cavetale.itemmarker.CustomItemUseEvent;
-import com.cavetale.itemmarker.ItemMarker;
+import com.cavetale.worldmarker.ItemMarker;
+import com.cavetale.worldmarker.MarkedItemUseEvent;
 import java.util.Objects;
 import lombok.NonNull;
 import org.bukkit.Material;
@@ -71,10 +71,10 @@ final class EventListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    void onCustomItemUse(CustomItemUseEvent event) {
-        if (!event.getCustomId().startsWith(plugin.ITEM_PREFIX)) return;
+    void onMarkedItemUse(MarkedItemUseEvent event) {
+        if (!event.getId().startsWith(plugin.ITEM_PREFIX)) return;
         event.setCancelled(true);
-        MobCatcher mobCatcher = MobCatcher.of(event.getCustomId());
+        MobCatcher mobCatcher = MobCatcher.of(event.getId());
         if (mobCatcher == null) return;
         Player player = event.getPlayer();
         if (player.isSneaking()) return;
