@@ -24,7 +24,7 @@ enum MobType {
         this(false);
     }
 
-    MobType(boolean master) {
+    MobType(final boolean master) {
         this.master = master;
         key = name().toLowerCase();
         displayName = name().substring(0, 1)

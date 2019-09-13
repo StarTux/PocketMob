@@ -1,6 +1,5 @@
 package com.cavetale.pocketmob;
 
-import com.cavetale.worldmarker.ItemMarker;
 import com.cavetale.worldmarker.MarkedItemUseEvent;
 import java.util.Objects;
 import lombok.NonNull;
@@ -42,7 +41,7 @@ final class EventListener implements Listener {
         event.setCancelled(true);
         final MobCatcher mobCatcher = MobCatcher.of(typeName);
         if (mobCatcher == null) return;
-        Catch caught = 
+        Catch caught =
             event.getAffectedEntities().stream()
             .map(e -> onMobCatcherHit(player, e, mobCatcher, event))
             .filter(Objects::nonNull)
@@ -50,7 +49,9 @@ final class EventListener implements Listener {
             .orElse(null);
         event.getPotion().remove();
         if (caught == null) return;
-        // Msg
+        String message = caught.message();
+        player.sendMessage(message);
+        player.sendActionBar(message);
     }
 
     private Catch onMobCatcherHit(@NonNull Player player,
@@ -64,16 +65,20 @@ final class EventListener implements Listener {
         if (intensity < 0.01) return null;
         Catch caught = new Catch(plugin);
         caught.hit(player, entity, pocketMob, mobCatcher, intensity);
-        if (!caught.success) return null;
-        if (null == plugin.eggifyAndDrop(entity, pocketMob)) return null;
-        entity.remove();
+        if (caught.success) {
+            if (null != plugin.eggifyAndDrop(entity, pocketMob)) {
+                entity.remove();
+            }
+        }
         return caught;
     }
 
     @EventHandler(ignoreCancelled = true)
     void onMarkedItemUse(MarkedItemUseEvent event) {
         if (!event.getId().startsWith(plugin.ITEM_PREFIX)) return;
+        if (!event.getClick().isRightClick()) return;
         event.setCancelled(true);
+        if (event.hasEntity()) return;
         MobCatcher mobCatcher = MobCatcher.of(event.getId());
         if (mobCatcher == null) return;
         Player player = event.getPlayer();
