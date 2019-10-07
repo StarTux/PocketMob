@@ -1,5 +1,6 @@
 package com.cavetale.pocketmob;
 
+import com.cavetale.worldmarker.EntityMarker;
 import com.cavetale.worldmarker.MarkedItemUseEvent;
 import java.util.Objects;
 import lombok.NonNull;
@@ -59,6 +60,7 @@ final class EventListener implements Listener {
                                   @NonNull MobCatcher mobCatcher,
                                   @NonNull PotionSplashEvent event) {
         if (!entity.isValid()) return null;
+        if (EntityMarker.getId(entity) != null) return null;
         final PocketMob pocketMob = PocketMob.of(entity.getType());
         if (pocketMob == null) return null;
         final double intensity = event.getIntensity(entity);
