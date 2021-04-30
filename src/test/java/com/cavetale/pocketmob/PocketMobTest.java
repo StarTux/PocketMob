@@ -1,84 +1,91 @@
 package com.cavetale.pocketmob;
 
-import java.io.File;
 import java.io.PrintStream;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.Material;
-import org.bukkit.entity.Ambient;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Boss;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Mob;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.NPC;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.WaterMob;
-import org.junit.Assert;
+import org.bukkit.entity.LivingEntity;
 import org.junit.Test;
 
 public final class PocketMobTest {
     @Test
-    public void test() throws Exception {
-        grabEntityTypes();
+    public void test() throws Exception { }
+
+    void dumpNonLivingEntities() {
+        for (EntityType ent : EntityType.values()) {
+            Class<?> clazz = ent.getEntityClass();
+            if (clazz == null) continue;
+            if (!LivingEntity.class.isAssignableFrom(clazz)) continue;
+            System.err.println("Not living entity: " + ent);
+        }
     }
 
-    void grabEntityTypes() throws Exception {
-        File file = new File("target/mobtypes.out");
-        PrintStream out = new PrintStream(file);
-        Map<MobType, Set<EntityType>> map = new EnumMap<>(MobType.class);
-        for (MobType mobType : MobType.values()) {
-            map.put(mobType, EnumSet.noneOf(EntityType.class));
-        }
+    void dumpMytems() {
+        int customModelData = 908301;
+        List<EntityType> types = new ArrayList<>();
         for (EntityType ent : EntityType.values()) {
-            Material mat;
-            try {
-                mat = Material.valueOf(ent.name() + "_SPAWN_EGG");
-            } catch (IllegalArgumentException iae) {
+            switch (ent) {
+            case ARMOR_STAND:
+            case PLAYER:
+            case UNKNOWN:
                 continue;
+            default:
+                break;
             }
-            MobType mobType;
             Class<?> clazz = ent.getEntityClass();
-            if (Boss.class.isAssignableFrom(clazz)) {
-                continue;
-                //mobType = MobType.BOSS;
-            } else if (Monster.class.isAssignableFrom(clazz)) {
-                mobType = MobType.MONSTER;
-            } else if (Tameable.class.isAssignableFrom(clazz)) {
-                mobType = MobType.PET;
-            } else if (Animals.class.isAssignableFrom(clazz)) {
-                mobType = MobType.ANIMAL;
-            } else if (WaterMob.class.isAssignableFrom(clazz)) {
-                mobType = MobType.WATER;
-            } else if (NPC.class.isAssignableFrom(clazz)) {
-                mobType = MobType.VILLAGER;
-            } else if (Ambient.class.isAssignableFrom(clazz)) {
-                // Bats
-                mobType = MobType.ANIMAL;
-            } else if (Mob.class.isAssignableFrom(clazz)) {
-                mobType = MobType.MONSTER;
-            } else {
-                System.err.println("No type: " + ent);
-                mobType = null;
-            }
-            Assert.assertNotNull(mobType);
-            Set<EntityType> types = map.get(mobType);
+            if (clazz == null) continue;
+            if (!LivingEntity.class.isAssignableFrom(clazz)) continue;
             types.add(ent);
         }
+        Collections.sort(types, (a, b) -> a.name().compareTo(b.name()));
+        //System.out.println(types.stream().map(s -> "Mytems.POCKET_" + s).collect(Collectors.joining(", ")));
+        for (int i = 0; i < types.size(); i += 1) {
+            EntityType type = types.get(i);
+            Material material;
+            try {
+                material = Material.valueOf(type.name() + "_SPAWN_EGG");
+            } catch (IllegalArgumentException iae) {
+                material = getIrregularSpawnEgg(type);
+            }
+            System.out.println("POCKET_" + type + "(mytems -> new PocketMob(mytems, EntityType." + type
+                               + "), Material." + material + ", " + customModelData + "),");
+        }
+    }
+
+    Material getIrregularSpawnEgg(EntityType type) {
+        switch (type) {
+        case ILLUSIONER:
+            return Material.VINDICATOR_SPAWN_EGG;
+        case GIANT:
+            return Material.ZOMBIE_SPAWN_EGG;
+        case ENDER_DRAGON:
+            return Material.ENDERMAN_SPAWN_EGG;
+        case WITHER:
+            return Material.WITHER_SKELETON_SPAWN_EGG;
+        case MUSHROOM_COW:
+            return Material.MOOSHROOM_SPAWN_EGG;
+        case SNOWMAN:
+            return Material.POLAR_BEAR_SPAWN_EGG;
+        case IRON_GOLEM:
+            return Material.WOLF_SPAWN_EGG;
+        default:
+            throw new IllegalStateException("No egg: " + type);
+        }
+    }
+
+    void printEntityTypes(PrintStream out) throws Exception {
         for (MobType mobType : MobType.values()) {
             String line = "    // " + mobType.name().substring(0, 1)
                 + mobType.name().substring(1).toLowerCase();
-            System.out.println(line);
             out.println(line);
-            map.get(mobType).stream()
+            mobType.entityTypes.stream()
                 .map(Enum::name)
                 .sorted()
                 .forEach(name -> {
                         String ln;
                         ln = "    " + name + "(MobType." + mobType + "),";
-                        System.out.println(ln);
                         out.println(ln);
                     });
         }

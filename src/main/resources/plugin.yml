@@ -5,27 +5,22 @@ api-version: 1.13
 description: Capture mob in spawn eggs.
 author: StarTux
 website: https://cavetale.com
-depend: [Dirty, WorldMarker]
+
+depend: [Dirty, WorldMarker, Mytems, Core]
 softdepend: []
+
 commands:
   pocketmob:
-    aliases: [pokemob]
-    description: PocketMob Command
-    permission: pocketmob.pocketmob
+    aliases: []
+    description: PocketMob Admin Command
+    permission: pocketmob.admin
     usage: |-
-      /pocketmob reload - Reload configs.
-      /pocketmob balls - Spawn a set of mob catchers.
-      /pocketmob menu - Open menu.
+      /pocketmob
+
 permissions:
-  pocketmob.pocketmob:
+  pocketmob.admin:
     description: Use /pocketmob
     default: op
-  pocketmob.stack:
-    description: Use /pocketmob stack
+  pocketmob.catch:
+    description: Throw MobCatchers and catch PocketMobs
     default: op
-  pocketmob.admin:
-    description: Use admin commands
-    default: op
-    children:
-      pocketmob.pocketmob: true
-      pocketmob.stack: true
