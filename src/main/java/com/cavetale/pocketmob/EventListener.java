@@ -189,7 +189,7 @@ public final class EventListener implements Listener {
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
-        if (mobType == null) return CatchResult.UNCATCHABLE;
+        if (mobType == null || mobType == MobType.BOSS) return CatchResult.UNCATCHABLE;
         if (player == null || player.getGameMode() != GameMode.CREATIVE) {
             if (random.nextDouble() > mobType.chance) return CatchResult.BAD_LUCK;
         }
