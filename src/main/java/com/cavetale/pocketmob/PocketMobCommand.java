@@ -62,7 +62,7 @@ final class PocketMobCommand implements TabExecutor {
         Merchant merchant = plugin.getServer().createMerchant(Component.text("PocketMob Crafting", PocketMobTag.COLOR_BG));
         ArrayList<MerchantRecipe> recipes = new ArrayList<>();
         for (Mytems mytems : MytemsTag.MOB_CATCHER.toList()) {
-            List ingredients = new ArrayList<>(2);
+            List<ItemStack> ingredients = new ArrayList<>(2);
             if (mytems != Mytems.MOB_CATCHER) {
                 ingredients.add(Mytems.MOB_CATCHER.createItemStack());
             }

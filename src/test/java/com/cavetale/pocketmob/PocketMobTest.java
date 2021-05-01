@@ -2,6 +2,7 @@ package com.cavetale.pocketmob;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Material;
@@ -11,7 +12,9 @@ import org.junit.Test;
 
 public final class PocketMobTest {
     @Test
-    public void test() throws Exception { }
+    public void test() throws Exception {
+        printEntityTypes(System.out);
+    }
 
     void dumpNonLivingEntities() {
         for (EntityType ent : EntityType.values()) {
@@ -75,20 +78,23 @@ public final class PocketMobTest {
         }
     }
 
+    List<String> sorted(Collection<EntityType> types) {
+        List<String> list = new ArrayList<>(types.size());
+        for (EntityType type : types) list.add(type.name());
+        Collections.sort(list);
+        return list;
+    }
+
     void printEntityTypes(PrintStream out) throws Exception {
-        for (MobType mobType : MobType.values()) {
-            String line = "    // " + mobType.name().substring(0, 1)
-                + mobType.name().substring(1).toLowerCase();
-            out.println(line);
-            mobType.entityTypes.stream()
-                .map(Enum::name)
-                .sorted()
-                .forEach(name -> {
-                        String ln;
-                        ln = "    " + name + "(MobType." + mobType + "),";
-                        out.println(ln);
-                    });
+        for (String entityType : sorted(MobType.NO_MOB_TYPE)) {
+            out.println("    case " + entityType + ":");
         }
-        out.close();
+        out.println("        return null;");
+        for (MobType mobType : MobType.values()) {
+            for (String entityType : sorted(mobType.entityTypes)) {
+                out.println("   case " + entityType + ":");
+            }
+            out.println("        return MobType." + mobType + ";");
+        }
     }
 }
