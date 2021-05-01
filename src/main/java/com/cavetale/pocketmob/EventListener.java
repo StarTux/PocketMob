@@ -4,6 +4,7 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsTag;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.worldmarker.entity.EntityMarker;
+import com.cavetale.worldmarker.item.ItemMarker;
 import com.winthier.generic_events.GenericEvents;
 import java.util.Objects;
 import java.util.Random;
@@ -31,8 +32,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * We listen for events pertaining to the PocketBall. Mob egg spawning
@@ -171,25 +175,56 @@ public final class EventListener implements Listener {
         return true;
     }
 
+    /**
+     * A simple item may be kept in the Pocket Mob's inventory. It's
+     * either:
+     * - A new item with the same material
+     * - The above plus identical enchants and damage value
+     * Anything more complex shall be removed prior to eggification.
+     */
+    static boolean isSimpleItem(ItemStack itemStack) {
+        if (ItemMarker.hasId(itemStack)) return false;
+        ItemStack copy = new ItemStack(itemStack.getType());
+        if (copy.isSimilar(itemStack)) return true;
+        if (!itemStack.hasItemMeta()) return false;
+        copy.addEnchantments(itemStack.getEnchantments());
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta instanceof Damageable) {
+            Damageable damageable = (Damageable) meta;
+            if (damageable.hasDamage()) {
+                Damageable copyDamageable = (Damageable) copy.getItemMeta();
+                copyDamageable.setDamage(damageable.getDamage());
+                copy.setItemMeta((ItemMeta) copyDamageable);
+            }
+        }
+        return copy.isSimilar(itemStack);
+    }
+
     boolean eggify(LivingEntity entity) {
         Mytems mytems = PocketMobPlugin.ENTITY_MYTEMS_MAP.get(entity.getType());
         if (mytems == null) return false;
         if (entity instanceof InventoryHolder) {
-            for (ItemStack itemStack : ((InventoryHolder) entity).getInventory()) {
+            InventoryHolder holder = (InventoryHolder) entity;
+            Inventory inventory = holder.getInventory();
+            for (int i = 0; i < inventory.getSize(); i += 1) {
+                ItemStack itemStack = inventory.getItem(i);
                 if (itemStack == null || itemStack.getType() == Material.AIR) continue;
+                if (isSimpleItem(itemStack)) continue;
                 entity.getWorld().dropItem(entity.getLocation(), itemStack.clone());
+                inventory.setItem(i, null);
             }
-            ((InventoryHolder) entity).getInventory().clear();
         }
         EntityEquipment equipment = entity.getEquipment();
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (equipment.getDropChance(slot) == 0) continue;
             ItemStack itemStack = equipment.getItem(slot);
             if (itemStack == null || itemStack.getType() == Material.AIR) continue;
-            if (random.nextDouble() > equipment.getDropChance(slot)) continue;
-            entity.getWorld().dropItem(entity.getLocation(), itemStack.clone());
+            if (isSimpleItem(itemStack)) continue;
+            double dropChance = equipment.getDropChance(slot);
+            if (dropChance > 0 && random.nextDouble() < dropChance) {
+                entity.getWorld().dropItem(entity.getLocation(), itemStack.clone());
+            }
+            equipment.setItem(slot, null);
         }
-        equipment.clear();
         ItemStack itemStack = PocketMobs.entity2item(entity, mytems);
         if (itemStack == null) return false;
         Item item = entity.getWorld().dropItem(entity.getLocation(), itemStack);
