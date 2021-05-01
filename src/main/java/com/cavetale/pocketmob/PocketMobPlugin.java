@@ -18,7 +18,7 @@ public final class PocketMobPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(eventListener, this);
-        getCommand("pocketmob").setExecutor(new PocketMobCommand(this));
+        new PocketMobCommand(this).enable();
         for (Mytems mytems : Mytems.values()) {
             Mytem mytem = mytems.getMytem();
             if (mytem instanceof PocketMob) {

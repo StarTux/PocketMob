@@ -9,6 +9,7 @@ import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -23,6 +24,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -65,6 +69,16 @@ public final class EventListener implements Listener {
                 projectile.getWorld().spawnParticle(Particle.SPELL_MOB, projectile.getLocation(), amount, range, range, range, 1);
                 for (Entity nearby : projectile.getNearbyEntities(range, range, range)) {
                     CatchResult catchResult = petCatcher(projectile, nearby, player);
+                    catchEffect(projectile.getLocation(), catchResult, null);
+                }
+                return;
+            }
+            case FISH_CATCHER: {
+                double range = 3;
+                int amount = (int) (range * range * range * 8.0 * 4.0);
+                projectile.getWorld().spawnParticle(Particle.SPELL_MOB, projectile.getLocation(), amount, range, range, range, 1);
+                for (Entity nearby : projectile.getNearbyEntities(range, range, range)) {
+                    CatchResult catchResult = fishCatcher(projectile, nearby, player);
                     catchEffect(projectile.getLocation(), catchResult, null);
                 }
                 return;
@@ -131,6 +145,33 @@ public final class EventListener implements Listener {
         return true;
     }
 
+    boolean eggify(LivingEntity entity) {
+        Mytems mytems = PocketMobPlugin.ENTITY_MYTEMS_MAP.get(entity.getType());
+        if (mytems == null) return false;
+        if (entity instanceof InventoryHolder) {
+            for (ItemStack itemStack : ((InventoryHolder) entity).getInventory()) {
+                if (itemStack == null || itemStack.getType() == Material.AIR) continue;
+                entity.getWorld().dropItem(entity.getLocation(), itemStack.clone());
+            }
+            ((InventoryHolder) entity).getInventory().clear();
+        }
+        EntityEquipment equipment = entity.getEquipment();
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (equipment.getDropChance(slot) == 0) continue;
+            ItemStack itemStack = equipment.getItem(slot);
+            if (itemStack == null || itemStack.getType() == Material.AIR) continue;
+            if (random.nextDouble() > equipment.getDropChance(slot)) continue;
+            entity.getWorld().dropItem(entity.getLocation(), itemStack.clone());
+        }
+        equipment.clear();
+        ItemStack itemStack = PocketMobs.entity2item(entity, mytems);
+        if (itemStack == null) return false;
+        Item item = entity.getWorld().dropItem(entity.getLocation(), itemStack);
+        if (item == null) return false;
+        entity.remove();
+        return true;
+    }
+
     /**
      * Direct hit with MobCatcher.
      * @return true if entity was eggified, false otherwise.
@@ -145,11 +186,7 @@ public final class EventListener implements Listener {
             if (random.nextDouble() > mobType.chance) return CatchResult.BAD_LUCK;
         }
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
-        ItemStack pocketMobItem = PocketMobs.entity2item(living);
-        if (pocketMobItem == null) return CatchResult.UNCATCHABLE;
-        Item item = projectile.getWorld().dropItem(projectile.getLocation(), pocketMobItem);
-        if (item == null) return CatchResult.DENIED;
-        living.remove();
+        if (!eggify(living)) return CatchResult.DENIED;
         return CatchResult.SUCCESS;
     }
 
@@ -166,11 +203,7 @@ public final class EventListener implements Listener {
         if (mobType != MobType.MONSTER) chance *= 0.5;
         if (mobType == MobType.BOSS) chance *= 0.1;
         if (random.nextDouble() > chance) return CatchResult.BAD_LUCK;
-        ItemStack pocketMobItem = PocketMobs.entity2item(living);
-        if (pocketMobItem == null) return CatchResult.UNCATCHABLE;
-        Item item = projectile.getWorld().dropItem(projectile.getLocation(), pocketMobItem);
-        if (item == null) return CatchResult.DENIED;
-        living.remove();
+        if (!eggify(living)) return CatchResult.DENIED;
         return CatchResult.SUCCESS;
     }
 
@@ -181,11 +214,7 @@ public final class EventListener implements Listener {
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType != MobType.VILLAGER) return CatchResult.UNCATCHABLE;
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
-        ItemStack pocketMobItem = PocketMobs.entity2item(living);
-        if (pocketMobItem == null) return CatchResult.UNCATCHABLE;
-        Item item = projectile.getWorld().dropItem(projectile.getLocation(), pocketMobItem);
-        if (item == null) return CatchResult.DENIED;
-        living.remove();
+        if (!eggify(living)) return CatchResult.DENIED;
         return CatchResult.SUCCESS;
     }
 
@@ -194,17 +223,13 @@ public final class EventListener implements Listener {
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
-        if (mobType != MobType.ANIMAL && mobType != MobType.PET && mobType != MobType.FISH) {
+        if (mobType != MobType.ANIMAL && mobType != MobType.PET) {
             return CatchResult.UNCATCHABLE;
         }
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
-        double chance = mobType.chance * 2.0;
+        double chance = 0.8;
         if (random.nextDouble() > chance) return CatchResult.BAD_LUCK;
-        ItemStack pocketMobItem = PocketMobs.entity2item(living);
-        if (pocketMobItem == null) return CatchResult.UNCATCHABLE;
-        Item item = projectile.getWorld().dropItem(projectile.getLocation(), pocketMobItem);
-        if (item == null) return CatchResult.DENIED;
-        living.remove();
+        if (!eggify(living)) return CatchResult.DENIED;
         return CatchResult.SUCCESS;
     }
 
@@ -217,11 +242,18 @@ public final class EventListener implements Listener {
         if (player == null || !living.isTamed() || !Objects.equals(player.getUniqueId(), living.getOwnerUniqueId())) {
             return CatchResult.UNCATCHABLE;
         }
-        ItemStack pocketMobItem = PocketMobs.entity2item(living);
-        if (pocketMobItem == null) return CatchResult.UNCATCHABLE;
-        Item item = projectile.getWorld().dropItem(projectile.getLocation(), pocketMobItem);
-        if (item == null) return CatchResult.DENIED;
-        living.remove();
+        if (!eggify(living)) return CatchResult.DENIED;
+        return CatchResult.SUCCESS;
+    }
+
+    CatchResult fishCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
+        if (hitEntity == null) return CatchResult.MISS;
+        if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
+        LivingEntity living = (LivingEntity) hitEntity;
+        MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
+        if (mobType != MobType.FISH) return CatchResult.UNCATCHABLE;
+        if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
+        if (!eggify(living)) return CatchResult.DENIED;
         return CatchResult.SUCCESS;
     }
 }

@@ -44,9 +44,7 @@ public final class PocketMobs {
         return tag;
     }
 
-    public static ItemStack entity2item(@NonNull Entity entity) {
-        Mytems mytems = PocketMobPlugin.ENTITY_MYTEMS_MAP.get(entity.getType());
-        if (mytems == null) return null;
+    public static ItemStack entity2item(@NonNull Entity entity, @NonNull Mytems mytems) {
         ItemStack itemStack = mytems.createItemStack();
         PocketMobTag tag = entity2tag(entity);
         tag.store(itemStack, (PocketMob) mytems.getMytem());
