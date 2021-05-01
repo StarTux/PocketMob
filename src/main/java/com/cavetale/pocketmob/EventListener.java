@@ -3,6 +3,7 @@ package com.cavetale.pocketmob;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsTag;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
+import com.cavetale.worldmarker.entity.EntityMarker;
 import com.winthier.generic_events.GenericEvents;
 import java.util.Objects;
 import java.util.Random;
@@ -187,6 +188,7 @@ public final class EventListener implements Listener {
     CatchResult mobCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
         if (hitEntity == null) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
+        if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType == null || mobType == MobType.BOSS) return CatchResult.UNCATCHABLE;
@@ -202,6 +204,7 @@ public final class EventListener implements Listener {
         if (hitEntity == null) return CatchResult.MISS;
         if (hitEntity instanceof ComplexEntityPart) hitEntity = ((ComplexEntityPart) hitEntity).getParent();
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
+        if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType != MobType.MONSTER && mobType != MobType.BOSS) return CatchResult.UNCATCHABLE;
@@ -218,6 +221,7 @@ public final class EventListener implements Listener {
     CatchResult villagerCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
         if (hitEntity == null) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
+        if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType != MobType.VILLAGER) return CatchResult.UNCATCHABLE;
@@ -229,6 +233,7 @@ public final class EventListener implements Listener {
     CatchResult animalCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
         if (hitEntity == null) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
+        if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType != MobType.ANIMAL && mobType != MobType.PET) {
@@ -257,6 +262,7 @@ public final class EventListener implements Listener {
     CatchResult fishCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
         if (hitEntity == null) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
+        if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType != MobType.FISH) return CatchResult.UNCATCHABLE;
