@@ -186,7 +186,7 @@ public final class EventListener implements Listener {
      * @return true if entity was eggified, false otherwise.
      */
     CatchResult mobCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
-        if (hitEntity == null) return CatchResult.MISS;
+        if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
         if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
@@ -201,7 +201,7 @@ public final class EventListener implements Listener {
     }
 
     CatchResult monsterCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
-        if (hitEntity == null) return CatchResult.MISS;
+        if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (hitEntity instanceof ComplexEntityPart) hitEntity = ((ComplexEntityPart) hitEntity).getParent();
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
         if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
@@ -219,7 +219,7 @@ public final class EventListener implements Listener {
     }
 
     CatchResult villagerCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
-        if (hitEntity == null) return CatchResult.MISS;
+        if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
         if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
@@ -231,7 +231,7 @@ public final class EventListener implements Listener {
     }
 
     CatchResult animalCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
-        if (hitEntity == null) return CatchResult.MISS;
+        if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
         if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
@@ -247,7 +247,7 @@ public final class EventListener implements Listener {
     }
 
     CatchResult petCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
-        if (hitEntity == null) return CatchResult.MISS;
+        if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof Tameable)) return CatchResult.UNCATCHABLE;
         Tameable living = (Tameable) hitEntity;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
@@ -260,7 +260,7 @@ public final class EventListener implements Listener {
     }
 
     CatchResult fishCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
-        if (hitEntity == null) return CatchResult.MISS;
+        if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
         if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
