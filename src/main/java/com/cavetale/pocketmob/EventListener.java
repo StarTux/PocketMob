@@ -229,17 +229,18 @@ public final class EventListener implements Listener {
         if (itemStack == null) return false;
         Item item = entity.getWorld().dropItem(entity.getLocation(), itemStack);
         if (item == null) return false;
+        if (entity.isLeashed()) {
+            entity.setLeashHolder(null);
+        }
         if (entity instanceof EnderDragon) {
             EnderDragon enderDragon = (EnderDragon) entity;
             DragonBattle dragonBattle = enderDragon.getDragonBattle();
             if (dragonBattle != null) {
                 enderDragon.setHealth(0);
-            } else {
-                enderDragon.remove();
+                return true;
             }
-        } else {
-            entity.remove();
         }
+        entity.remove();
         return true;
     }
 
