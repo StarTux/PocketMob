@@ -7,6 +7,7 @@ import com.cavetale.worldmarker.entity.EntityMarker;
 import com.winthier.generic_events.GenericEvents;
 import java.util.Objects;
 import java.util.Random;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -15,7 +16,9 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.boss.DragonBattle;
 import org.bukkit.entity.ComplexEntityPart;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -61,7 +64,7 @@ public final class EventListener implements Listener {
                 projectile.getWorld().spawnParticle(Particle.SPELL_MOB, projectile.getLocation(), amount, range, range, range, 1);
                 for (Entity nearby : projectile.getNearbyEntities(range, range, range)) {
                     CatchResult catchResult = animalCatcher(projectile, nearby, player);
-                    catchEffect(projectile.getLocation(), catchResult, null);
+                    catchEffect(projectile.getLocation(), catchResult, null, player);
                 }
                 return;
             }
@@ -71,7 +74,7 @@ public final class EventListener implements Listener {
                 projectile.getWorld().spawnParticle(Particle.SPELL_MOB, projectile.getLocation(), amount, range, range, range, 1);
                 for (Entity nearby : projectile.getNearbyEntities(range, range, range)) {
                     CatchResult catchResult = petCatcher(projectile, nearby, player);
-                    catchEffect(projectile.getLocation(), catchResult, null);
+                    catchEffect(projectile.getLocation(), catchResult, null, player);
                 }
                 return;
             }
@@ -81,23 +84,23 @@ public final class EventListener implements Listener {
                 projectile.getWorld().spawnParticle(Particle.SPELL_MOB, projectile.getLocation(), amount, range, range, range, 1);
                 for (Entity nearby : projectile.getNearbyEntities(range, range, range)) {
                     CatchResult catchResult = fishCatcher(projectile, nearby, player);
-                    catchEffect(projectile.getLocation(), catchResult, null);
+                    catchEffect(projectile.getLocation(), catchResult, null, player);
                 }
                 return;
             }
             case VILLAGER_CATCHER: {
                 CatchResult catchResult = villagerCatcher(projectile, event.getHitEntity(), player);
-                catchEffect(projectile.getLocation(), catchResult, mytems);
+                catchEffect(projectile.getLocation(), catchResult, mytems, player);
                 return;
             }
             case MONSTER_CATCHER: {
                 CatchResult catchResult = monsterCatcher(projectile, event.getHitEntity(), player);
-                catchEffect(projectile.getLocation(), catchResult, mytems);
+                catchEffect(projectile.getLocation(), catchResult, mytems, player);
                 return;
             }
             case MOB_CATCHER: default: {
                 CatchResult catchResult = mobCatcher(projectile, event.getHitEntity(), player);
-                catchEffect(projectile.getLocation(), catchResult, mytems);
+                catchEffect(projectile.getLocation(), catchResult, mytems, player);
                 return;
             }
             }
@@ -123,11 +126,13 @@ public final class EventListener implements Listener {
         }
     }
 
-    void catchEffect(Location location, CatchResult catchResult, Mytems mytems) {
+    void catchEffect(Location location, CatchResult catchResult, Mytems mytems, Player player) {
         switch (catchResult) {
         case MISS: case UNCATCHABLE: case DENIED:
             if (mytems == null) return;
-            location.getWorld().dropItem(location, mytems.createItemStack());
+            if (player == null || player.getGameMode() != GameMode.CREATIVE) {
+                location.getWorld().dropItem(location, mytems.createItemStack());
+            }
             location.getWorld().playSound(location, Sound.ENTITY_ITEM_PICKUP, SoundCategory.MASTER, 0.5f, 0.5f);
             break;
         case BAD_LUCK:
@@ -145,11 +150,23 @@ public final class EventListener implements Listener {
         if (entity instanceof Tameable) {
             Tameable tameable = (Tameable) entity;
             if (tameable.isTamed()) {
-                return Objects.equals(player.getUniqueId(), tameable.getOwnerUniqueId());
+                UUID owner = tameable.getOwnerUniqueId();
+                if (owner != null) {
+                    return Objects.equals(player.getUniqueId(), owner);
+                }
             }
         }
         if (!GenericEvents.playerCanDamageEntity(player, entity)) {
             return false;
+        }
+        return true;
+    }
+
+    boolean runEntityChecks(Entity entity) {
+        if (EntityMarker.hasId(entity)) return false;
+        if (!entity.getPassengers().isEmpty()) return false;
+        if (entity instanceof EnderDragon) {
+            if (((EnderDragon) entity).getPhase() == EnderDragon.Phase.DYING) return false;
         }
         return true;
     }
@@ -177,7 +194,17 @@ public final class EventListener implements Listener {
         if (itemStack == null) return false;
         Item item = entity.getWorld().dropItem(entity.getLocation(), itemStack);
         if (item == null) return false;
-        entity.remove();
+        if (entity instanceof EnderDragon) {
+            EnderDragon enderDragon = (EnderDragon) entity;
+            DragonBattle dragonBattle = enderDragon.getDragonBattle();
+            if (dragonBattle != null) {
+                enderDragon.setHealth(0);
+            } else {
+                enderDragon.remove();
+            }
+        } else {
+            entity.remove();
+        }
         return true;
     }
 
@@ -186,43 +213,52 @@ public final class EventListener implements Listener {
      * @return true if entity was eggified, false otherwise.
      */
     CatchResult mobCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
+        if (hitEntity instanceof ComplexEntityPart) hitEntity = ((ComplexEntityPart) hitEntity).getParent();
         if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
-        if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
+        if (player != null && player.getGameMode() == GameMode.CREATIVE) {
+            return eggify(living) ? CatchResult.SUCCESS : CatchResult.UNCATCHABLE;
+        }
+        if (!runEntityChecks(living)) return CatchResult.UNCATCHABLE;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType == null || mobType == MobType.BOSS) return CatchResult.UNCATCHABLE;
-        if (player == null || player.getGameMode() != GameMode.CREATIVE) {
-            if (random.nextDouble() > mobType.chance) return CatchResult.BAD_LUCK;
-        }
+        if (random.nextDouble() > mobType.chance) return CatchResult.BAD_LUCK;
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
         if (!eggify(living)) return CatchResult.DENIED;
         return CatchResult.SUCCESS;
     }
 
     CatchResult monsterCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
-        if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (hitEntity instanceof ComplexEntityPart) hitEntity = ((ComplexEntityPart) hitEntity).getParent();
+        if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
-        if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
+        if (player != null && player.getGameMode() == GameMode.CREATIVE) {
+            return eggify(living) ? CatchResult.SUCCESS : CatchResult.UNCATCHABLE;
+        }
+        if (!runEntityChecks(living)) return CatchResult.UNCATCHABLE;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType != MobType.MONSTER && mobType != MobType.BOSS) return CatchResult.UNCATCHABLE;
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
         double maxHealth = living.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
         double health = living.getHealth();
         double chance = Math.min(0.95, mobType.chance + (1.0 - (health / maxHealth)));
-        if (mobType == MobType.BOSS) chance *= 0.035;
+        if (mobType == MobType.BOSS) chance *= 0.025;
         if (random.nextDouble() > chance) return CatchResult.BAD_LUCK;
         if (!eggify(living)) return CatchResult.DENIED;
         return CatchResult.SUCCESS;
     }
 
     CatchResult villagerCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
+        if (hitEntity instanceof ComplexEntityPart) hitEntity = ((ComplexEntityPart) hitEntity).getParent();
         if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
-        if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
+        if (player != null && player.getGameMode() == GameMode.CREATIVE) {
+            return eggify(living) ? CatchResult.SUCCESS : CatchResult.UNCATCHABLE;
+        }
+        if (!runEntityChecks(living)) return CatchResult.UNCATCHABLE;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType != MobType.VILLAGER) return CatchResult.UNCATCHABLE;
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
@@ -231,10 +267,14 @@ public final class EventListener implements Listener {
     }
 
     CatchResult animalCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
+        if (hitEntity instanceof ComplexEntityPart) hitEntity = ((ComplexEntityPart) hitEntity).getParent();
         if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
-        if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
+        if (player != null && player.getGameMode() == GameMode.CREATIVE) {
+            return eggify(living) ? CatchResult.SUCCESS : CatchResult.UNCATCHABLE;
+        }
+        if (!runEntityChecks(living)) return CatchResult.UNCATCHABLE;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType != MobType.ANIMAL && mobType != MobType.PET) {
             return CatchResult.UNCATCHABLE;
@@ -247,12 +287,15 @@ public final class EventListener implements Listener {
     }
 
     CatchResult petCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
+        if (hitEntity instanceof ComplexEntityPart) hitEntity = ((ComplexEntityPart) hitEntity).getParent();
         if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof Tameable)) return CatchResult.UNCATCHABLE;
         Tameable living = (Tameable) hitEntity;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType == null) return CatchResult.UNCATCHABLE;
-        if (player == null || !living.isTamed() || !Objects.equals(player.getUniqueId(), living.getOwnerUniqueId())) {
+        if (player == null || !living.isTamed()) return CatchResult.UNCATCHABLE;
+        UUID owner = living.getOwnerUniqueId();
+        if (owner != null && !Objects.equals(player.getUniqueId(), owner)) {
             return CatchResult.UNCATCHABLE;
         }
         if (!eggify(living)) return CatchResult.DENIED;
@@ -262,8 +305,11 @@ public final class EventListener implements Listener {
     CatchResult fishCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
         if (hitEntity == null || !hitEntity.isValid()) return CatchResult.MISS;
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
-        if (EntityMarker.hasId(hitEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
+        if (player != null && player.getGameMode() == GameMode.CREATIVE) {
+            return eggify(living) ? CatchResult.SUCCESS : CatchResult.UNCATCHABLE;
+        }
+        if (!runEntityChecks(living)) return CatchResult.UNCATCHABLE;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType != MobType.FISH) return CatchResult.UNCATCHABLE;
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
