@@ -14,6 +14,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.ComplexEntityPart;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -199,6 +200,7 @@ public final class EventListener implements Listener {
 
     CatchResult monsterCatcher(ThrowableProjectile projectile, Entity hitEntity, Player player) {
         if (hitEntity == null) return CatchResult.MISS;
+        if (hitEntity instanceof ComplexEntityPart) hitEntity = ((ComplexEntityPart) hitEntity).getParent();
         if (!(hitEntity instanceof LivingEntity)) return CatchResult.UNCATCHABLE;
         LivingEntity living = (LivingEntity) hitEntity;
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
@@ -207,7 +209,7 @@ public final class EventListener implements Listener {
         double maxHealth = living.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
         double health = living.getHealth();
         double chance = Math.min(0.95, mobType.chance + (1.0 - (health / maxHealth)));
-        if (mobType == MobType.BOSS) chance *= 0.1;
+        if (mobType == MobType.BOSS) chance *= 0.01;
         if (random.nextDouble() > chance) return CatchResult.BAD_LUCK;
         if (!eggify(living)) return CatchResult.DENIED;
         return CatchResult.SUCCESS;
