@@ -103,7 +103,14 @@ public final class EventListener implements Listener {
             event.setCancelled(true);
             projectile.remove();
             PocketMob pocketMob = (PocketMob) mytems.getMytem();
-            Entity entity = PocketMobs.item2entity(projectile.getLocation(), thrownItem, pocketMob);
+            final Entity entity;
+            switch (pocketMob.getEntityType()) {
+            case ENDER_DRAGON: case WITHER:
+                entity = null;
+                break;
+            default:
+                entity = PocketMobs.item2entity(projectile.getLocation(), thrownItem, pocketMob);
+            }
             if (entity == null) {
                 projectile.getWorld().dropItem(projectile.getLocation(), thrownItem);
             }
