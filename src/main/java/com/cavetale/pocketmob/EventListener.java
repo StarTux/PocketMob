@@ -209,7 +209,7 @@ public final class EventListener implements Listener {
         double maxHealth = living.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
         double health = living.getHealth();
         double chance = Math.min(0.95, mobType.chance + (1.0 - (health / maxHealth)));
-        if (mobType == MobType.BOSS) chance *= 0.01;
+        if (mobType == MobType.BOSS) chance *= 0.035;
         if (random.nextDouble() > chance) return CatchResult.BAD_LUCK;
         if (!eggify(living)) return CatchResult.DENIED;
         return CatchResult.SUCCESS;
