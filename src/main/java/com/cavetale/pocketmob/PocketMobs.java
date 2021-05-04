@@ -57,6 +57,12 @@ public final class PocketMobs {
         "WorldUUIDLeast",
         "WorldUUIDMost",
     };
+    // All known NBT compound names which may contain a UUID stored as
+    // int array. Json doesn't retain if an int list is an array, so
+    // we try to convert these.
+    protected static final String[] UUID_TAGS = {
+        "UUID", "AngryAt"
+    };
 
     private PocketMobs() { }
 
@@ -96,9 +102,14 @@ public final class PocketMobs {
         try {
             if (object instanceof Map) {
                 Map<String, Object> map = (Map<String, Object>) object;
-                if (map.containsKey("UUID")) {
-                    int[] array = fixUuidTag(map.get("UUID"));
-                    if (array != null) map.put("UUID", array);
+                // Here we try to turn all known tags which could
+                // contain an int[4] and change them from a list to an
+                // array.
+                for (String uuidKey : UUID_TAGS) {
+                    if (map.containsKey(uuidKey)) {
+                        int[] array = fixUuidTag(map.get(uuidKey));
+                        if (array != null) map.put(uuidKey, array);
+                    }
                 }
                 for (Object o : map.values()) fixEntityTag(o);
             } else if (object instanceof List) {
