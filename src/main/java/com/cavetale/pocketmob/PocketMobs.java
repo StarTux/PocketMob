@@ -61,7 +61,7 @@ public final class PocketMobs {
     // int array. Json doesn't retain if an int list is an array, so
     // we try to convert these.
     protected static final String[] UUID_TAGS = {
-        "UUID", "AngryAt"
+        "AngryAt", "UUID", "Owner", "LoveCause"
     };
 
     private PocketMobs() { }
