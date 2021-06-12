@@ -101,6 +101,7 @@ public final class PocketMobs {
     private static void fixEntityTag(Object object) {
         try {
             if (object instanceof Map) {
+                @SuppressWarnings("unchecked")
                 Map<String, Object> map = (Map<String, Object>) object;
                 // Here we try to turn all known tags which could
                 // contain an int[4] and change them from a list to an
