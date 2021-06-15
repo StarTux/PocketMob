@@ -8,10 +8,12 @@ import com.cavetale.mytems.util.Json;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
 
@@ -122,7 +124,8 @@ public final class PocketMobs {
         }
     }
 
-    public static Entity item2entity(Location location, ItemStack itemStack, PocketMob pocketMob) {
+    public static Entity item2entity(Location location, ItemStack itemStack, PocketMob pocketMob,
+                                     @Nullable Player player) {
         PocketMobTag tag = new PocketMobTag();
         tag.load(itemStack, pocketMob);
         Map<String, Object> entityTag = tag.parseMobTag();
@@ -130,6 +133,13 @@ public final class PocketMobs {
         if (entityTag == null) return null;
         fixEntityTag(entityTag);
         EntityType entityType = pocketMob.getEntityType();
+        PocketMobPlugin.getInstance().getLogger()
+            .info((player != null ? player.getName() + " " : "")
+                  + "spawning " + entityType
+                  + " " + location.getBlockX()
+                  + " " + location.getBlockY()
+                  + " " + location.getBlockZ()
+                  + " " + tag.getMobTag());
         Entity entity = location.getWorld().spawnEntity(location, entityType, SpawnReason.SPAWNER_EGG, e -> {
                 Dirty.setEntityTag(e, entityTag);
             });

@@ -6,10 +6,12 @@ import com.cavetale.mytems.item.pocketmob.MobCatcher;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import java.util.EnumMap;
 import java.util.Map;
+import lombok.Getter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PocketMobPlugin extends JavaPlugin {
+    @Getter protected static PocketMobPlugin instance;
     protected final EventListener eventListener = new EventListener(this);
     protected final PocketMobDelegate pocketMobDelegate = new PocketMobDelegate(this);
     protected final MobCatcherDelegate mobCatcherDelegate = new MobCatcherDelegate(this);
@@ -17,6 +19,7 @@ public final class PocketMobPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
         getServer().getPluginManager().registerEvents(eventListener, this);
         new PocketMobCommand(this).enable();
         for (Mytems mytems : Mytems.values()) {

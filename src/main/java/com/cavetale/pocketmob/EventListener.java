@@ -122,7 +122,7 @@ public final class EventListener implements Listener {
                     entity = null;
                     break;
                 default:
-                    entity = PocketMobs.item2entity(location, thrownItem, pocketMob);
+                    entity = PocketMobs.item2entity(location, thrownItem, pocketMob, player);
                 }
             }
             if (entity == null) {
