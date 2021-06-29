@@ -50,10 +50,12 @@ public enum MobType {
         case FIREBALL:
         case FIREWORK:
         case FISHING_HOOK:
+        case GLOW_ITEM_FRAME:
         case ITEM_FRAME:
         case LEASH_HITCH:
         case LIGHTNING:
         case LLAMA_SPIT:
+        case MARKER:
         case MINECART:
         case MINECART_CHEST:
         case MINECART_COMMAND:
@@ -76,16 +78,19 @@ public enum MobType {
             return null;
         case COD:
         case DOLPHIN:
+        case GLOW_SQUID:
         case PUFFERFISH:
         case SALMON:
         case SQUID:
         case TROPICAL_FISH:
             return MobType.FISH;
+        case AXOLOTL:
         case BAT:
         case BEE:
         case CHICKEN:
         case COW:
         case FOX:
+        case GOAT:
         case MUSHROOM_COW:
         case OCELOT:
         case PANDA:
