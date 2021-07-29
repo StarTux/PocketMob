@@ -1,11 +1,11 @@
 package com.cavetale.pocketmob;
 
+import com.cavetale.core.event.block.PlayerCanBuildEvent;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsTag;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.item.ItemMarker;
-import com.winthier.generic_events.GenericEvents;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
@@ -114,7 +114,7 @@ public final class EventListener implements Listener {
             PocketMob pocketMob = (PocketMob) mytems.getMytem();
             final Entity entity;
             Location location = projectile.getLocation();
-            if (player != null && !GenericEvents.playerCanBuild(player, location.getBlock())) {
+            if (player != null && !PlayerCanBuildEvent.call(player, location.getBlock())) {
                 entity = null;
             } else {
                 switch (pocketMob.getEntityType()) {
@@ -164,9 +164,6 @@ public final class EventListener implements Listener {
                     return Objects.equals(player.getUniqueId(), owner);
                 }
             }
-        }
-        if (!GenericEvents.playerCanDamageEntity(player, entity)) {
-            return false;
         }
         return true;
     }

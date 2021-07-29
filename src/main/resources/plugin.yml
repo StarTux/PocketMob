@@ -1,7 +1,7 @@
 main: com.cavetale.pocketmob.PocketMobPlugin
 name: PocketMob
 version: 0.1
-api-version: 1.13
+api-version: 1.17
 description: Capture mob in spawn eggs.
 author: StarTux
 website: https://cavetale.com
