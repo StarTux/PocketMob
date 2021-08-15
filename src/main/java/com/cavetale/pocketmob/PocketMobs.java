@@ -5,6 +5,7 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.mytems.item.pocketmob.PocketMobTag;
 import com.cavetale.mytems.util.Json;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,10 @@ public final class PocketMobs {
     protected static final String[] UUID_TAGS = {
         "AngryAt", "UUID", "Owner", "LoveCause"
     };
+    // Foxes </3
+    protected static final String[] UUID_LIST_TAGS = {
+        "Trusted",
+    };
 
     private PocketMobs() { }
 
@@ -86,6 +91,11 @@ public final class PocketMobs {
         return itemStack;
     }
 
+    /**
+     * Turn a list of 4 Numbers into an array of 4 ints, representing
+     * a UUID.
+     * @return the array or null if conversion is not possible
+     */
     private static int[] fixUuidTag(Object object) {
         if (!(object instanceof List)) return null;
         List<?> list = (List<?>) object;
@@ -93,11 +103,31 @@ public final class PocketMobs {
         int[] array = new int[4];
         for (int i = 0; i < 4; i += 1) {
             Object o = list.get(i);
+            // Bail out if a single element does not fit!
             if (!(o instanceof Number)) return null;
             Number number = (Number) o;
             array[i] = number.intValue();
         }
         return array;
+    }
+
+    /**
+     * Turn a list of Number lists into a list of 4-int arrays,
+     * representing a UUID.
+     * @return the list or null if conversion is not possible
+     */
+    private static List<int[]> fixUuidList(Object object) {
+        if (!(object instanceof List)) return null;
+        @SuppressWarnings("unchecked")
+        final List<Object> list = (List) object;
+        List<int[]> result = new ArrayList<>(list.size());
+        for (Object o : list) {
+            int[] uuidTag = fixUuidTag(o);
+            // Bail out if a single element does not fit!
+            if (uuidTag == null) return null;
+            result.add(uuidTag);
+        }
+        return result;
     }
 
     private static void fixEntityTag(Object object) {
@@ -112,6 +142,14 @@ public final class PocketMobs {
                     if (map.containsKey(uuidKey)) {
                         int[] array = fixUuidTag(map.get(uuidKey));
                         if (array != null) map.put(uuidKey, array);
+                    }
+                }
+                for (String uuidListKey : UUID_LIST_TAGS) {
+                    if (map.containsKey(uuidListKey)) {
+                        List<int[]> uuidList = fixUuidList(map.get(uuidListKey));
+                        if (uuidList != null) {
+                            map.put(uuidListKey, uuidList);
+                        }
                     }
                 }
                 for (Object o : map.values()) fixEntityTag(o);
