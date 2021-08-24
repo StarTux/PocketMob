@@ -1,6 +1,8 @@
 package com.cavetale.pocketmob;
 
-import com.cavetale.core.event.block.PlayerCanBuildEvent;
+import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
+import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
+import com.cavetale.core.event.entity.PluginEntityEvent;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsTag;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
@@ -9,6 +11,7 @@ import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -114,7 +117,7 @@ public final class EventListener implements Listener {
             PocketMob pocketMob = (PocketMob) mytems.getMytem();
             final Entity entity;
             Location location = projectile.getLocation();
-            if (player != null && !PlayerCanBuildEvent.call(player, location.getBlock())) {
+            if (player != null && !PlayerBlockAbilityQuery.Action.SPAWN_MOB.query(player, location.getBlock())) {
                 entity = null;
             } else {
                 switch (pocketMob.getEntityType()) {
@@ -135,7 +138,7 @@ public final class EventListener implements Listener {
         }
     }
 
-    void catchEffect(Location location, CatchResult catchResult, Mytems mytems, Player player) {
+    private void catchEffect(Location location, CatchResult catchResult, Mytems mytems, Player player) {
         switch (catchResult) {
         case MISS: case UNCATCHABLE: case DENIED:
             if (mytems == null) return;
@@ -155,7 +158,10 @@ public final class EventListener implements Listener {
         }
     }
 
-    boolean runPlayerChecks(Player player, Entity entity) {
+    private boolean runPlayerChecks(@NonNull final Player player, @NonNull final Entity entity) {
+        if (!PlayerEntityAbilityQuery.Action.CATCH.query(player, entity)) {
+            return false;
+        }
         if (entity instanceof Tameable) {
             Tameable tameable = (Tameable) entity;
             if (tameable.isTamed()) {
@@ -168,7 +174,7 @@ public final class EventListener implements Listener {
         return true;
     }
 
-    boolean runEntityChecks(Entity entity) {
+    private boolean runEntityChecks(Entity entity) {
         if (EntityMarker.hasId(entity)) return false;
         if (!entity.getPassengers().isEmpty()) return false;
         if (entity instanceof EnderDragon) {
@@ -202,7 +208,10 @@ public final class EventListener implements Listener {
         return copy.isSimilar(itemStack);
     }
 
-    boolean eggify(LivingEntity entity) {
+    private boolean eggify(final LivingEntity entity) {
+        if (!PluginEntityEvent.Action.EGGIFY.call(plugin, entity)) {
+            return false;
+        }
         Mytems mytems = PocketMobPlugin.ENTITY_MYTEMS_MAP.get(entity.getType());
         if (mytems == null) return false;
         if (entity instanceof InventoryHolder) {
