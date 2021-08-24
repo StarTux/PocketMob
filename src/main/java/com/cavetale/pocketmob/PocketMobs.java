@@ -37,7 +37,6 @@ public final class PocketMobs {
         "Motion",
         "OnGround",
         "Paper.Origin",
-        "Paper.Origin",
         "Paper.SpawnReason",
         "Passengers",
         "PatrolLeader",
