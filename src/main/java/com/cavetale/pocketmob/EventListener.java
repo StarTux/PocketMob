@@ -3,6 +3,8 @@ package com.cavetale.pocketmob;
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.core.event.entity.PluginEntityEvent;
+import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
+import com.cavetale.core.event.player.PluginPlayerEvent;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsTag;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
@@ -134,6 +136,10 @@ public final class EventListener implements Listener {
             if (player != null && entity instanceof Tameable) {
                 Tameable tameable = (Tameable) entity;
                 tameable.setOwner(player);
+            }
+            if (player != null) {
+                PluginPlayerEvent.Name.POCKET_MOB_RELEASE.ultimate(plugin, player)
+                    .detail(Detail.ENTITY, entity).call();
             }
         }
     }
@@ -273,6 +279,10 @@ public final class EventListener implements Listener {
         if (random.nextDouble() > mobType.chance) return CatchResult.BAD_LUCK;
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
         if (!eggify(living)) return CatchResult.DENIED;
+        if (player != null) {
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
+                .detail(Detail.ENTITY, living).call();
+        }
         return CatchResult.SUCCESS;
     }
 
@@ -310,6 +320,10 @@ public final class EventListener implements Listener {
         if (mobType != MobType.VILLAGER) return CatchResult.UNCATCHABLE;
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
         if (!eggify(living)) return CatchResult.DENIED;
+        if (player != null) {
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
+                .detail(Detail.ENTITY, living).call();
+        }
         return CatchResult.SUCCESS;
     }
 
@@ -330,6 +344,10 @@ public final class EventListener implements Listener {
         double chance = 0.8;
         if (random.nextDouble() > chance) return CatchResult.BAD_LUCK;
         if (!eggify(living)) return CatchResult.DENIED;
+        if (player != null) {
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
+                .detail(Detail.ENTITY, living).call();
+        }
         return CatchResult.SUCCESS;
     }
 
@@ -346,6 +364,10 @@ public final class EventListener implements Listener {
             return CatchResult.UNCATCHABLE;
         }
         if (!eggify(living)) return CatchResult.DENIED;
+        if (player != null) {
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
+                .detail(Detail.ENTITY, living).call();
+        }
         return CatchResult.SUCCESS;
     }
 
@@ -361,6 +383,10 @@ public final class EventListener implements Listener {
         if (mobType != MobType.FISH) return CatchResult.UNCATCHABLE;
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
         if (!eggify(living)) return CatchResult.DENIED;
+        if (player != null) {
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
+                .detail(Detail.ENTITY, living).call();
+        }
         return CatchResult.SUCCESS;
     }
 }
