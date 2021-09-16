@@ -130,7 +130,8 @@ public final class EventListener implements Listener {
                     entity = PocketMobs.item2entity(location, thrownItem, pocketMob, player);
                 }
             }
-            if (entity == null) {
+            if (entity == null || entity.isDead()) {
+                if (entity != null) entity.remove();
                 projectile.getWorld().dropItem(projectile.getLocation(), thrownItem);
             }
             if (player != null && entity instanceof Tameable) {
