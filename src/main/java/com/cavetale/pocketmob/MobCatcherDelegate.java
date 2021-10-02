@@ -21,7 +21,7 @@ public final class MobCatcherDelegate implements MobCatcher.Delegate {
         if (!player.hasPermission("pocketmob.catch")) return;
         Vector velocity = player.getLocation().getDirection().normalize();
         Egg projectile = player.launchProjectile(Egg.class, velocity);
-        if (projectile == null) return;
+        if (projectile == null || projectile.isDead()) return;
         projectile.setPersistent(false);
         ItemStack thrownItem = item.clone();
         thrownItem.setAmount(1);
