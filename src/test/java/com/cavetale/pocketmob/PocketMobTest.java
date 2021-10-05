@@ -1,5 +1,6 @@
 package com.cavetale.pocketmob;
 
+import com.cavetale.mytems.Mytems;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,9 +12,12 @@ import org.bukkit.entity.LivingEntity;
 import org.junit.Test;
 
 public final class PocketMobTest {
+    private static final int CUSTOM_MODEL_DATA = 908301;
+
     @Test
     public void test() throws Exception {
-        printEntityTypes(System.out);
+        //printEntityTypes(System.out);
+        dumpEnum(true);
     }
 
     void dumpNonLivingEntities() {
@@ -25,8 +29,7 @@ public final class PocketMobTest {
         }
     }
 
-    void dumpMytems() {
-        int customModelData = 908301;
+    void dumpEnum(boolean pocketMobType) {
         List<EntityType> types = new ArrayList<>();
         for (EntityType ent : EntityType.values()) {
             switch (ent) {
@@ -43,17 +46,33 @@ public final class PocketMobTest {
             types.add(ent);
         }
         Collections.sort(types, (a, b) -> a.name().compareTo(b.name()));
-        //System.out.println(types.stream().map(s -> "Mytems.POCKET_" + s).collect(Collectors.joining(", ")));
-        for (int i = 0; i < types.size(); i += 1) {
-            EntityType type = types.get(i);
-            Material material;
-            try {
-                material = Material.valueOf(type.name() + "_SPAWN_EGG");
-            } catch (IllegalArgumentException iae) {
-                material = getIrregularSpawnEgg(type);
+        if (!pocketMobType) {
+            for (int i = 0; i < types.size(); i += 1) {
+                EntityType type = types.get(i);
+                Material material;
+                try {
+                    material = Material.valueOf(type.name() + "_SPAWN_EGG");
+                } catch (IllegalArgumentException iae) {
+                    material = getIrregularSpawnEgg(type);
+                }
+                System.out.println("POCKET_" + type
+                                   + "("
+                                   + "PocketMob::new"
+                                   + ", Material." + material
+                                   + ", " + CUSTOM_MODEL_DATA
+                                   + ", (char) 0"
+                                   + ", Category.POCKET_MOB"
+                                   + "),");
             }
-            System.out.println("POCKET_" + type + "(mytems -> new PocketMob(mytems, EntityType." + type
-                               + "), Material." + material + ", " + customModelData + "),");
+        } else {
+            for (int i = 0; i < types.size(); i += 1) {
+                EntityType type = types.get(i);
+                System.out.println(type
+                                   + "("
+                                   + "Mytems." + "POCKET_" + type
+                                   + ", EntityType." + type
+                                   + "),");
+            }
         }
     }
 
