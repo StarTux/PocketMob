@@ -7,10 +7,12 @@ import com.cavetale.mytems.item.pocketmob.PocketMobTag;
 import com.cavetale.mytems.util.Json;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 import lombok.NonNull;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -73,12 +75,8 @@ public final class PocketMobs {
     private PocketMobs() { }
 
     public static PocketMobTag entity2tag(@NonNull Entity entity) {
-        Map<String, Object> entityTag = Dirty.getEntityTag(entity);
-        for (String illegalMobTag : ILLEGAL_MOB_TAGS) {
-            entityTag.remove(illegalMobTag);
-        }
         PocketMobTag tag = new PocketMobTag();
-        tag.setMobTag(Json.serialize(entityTag));
+        tag.serializeMob(entity);
         tag.setDisplayName(entity.customName());
         return tag;
     }
@@ -165,21 +163,28 @@ public final class PocketMobs {
                                      @Nullable Player player) {
         PocketMobTag tag = new PocketMobTag();
         tag.load(itemStack, pocketMob);
-        Map<String, Object> entityTag = tag.parseMobTag();
-        entityTag.put("Pos", Arrays.asList(location.getX(), location.getY(), location.getZ()));
-        if (entityTag == null) return null;
-        fixEntityTag(entityTag);
-        EntityType entityType = pocketMob.getEntityType();
-        PocketMobPlugin.getInstance().getLogger()
-            .info((player != null ? player.getName() + " " : "")
-                  + "spawning " + entityType
-                  + " " + location.getBlockX()
-                  + " " + location.getBlockY()
-                  + " " + location.getBlockZ()
-                  + " " + tag.getMobTag());
-        Entity entity = location.getWorld().spawnEntity(location, entityType, SpawnReason.SPAWNER_EGG, e -> {
-                Dirty.setEntityTag(e, entityTag);
-            });
-        return entity;
+        if (tag.getMob() != null) {
+            Entity entity = tag.deserializeMob(location.getWorld());
+            if (entity == null) return null;
+            return entity.spawnAt(location, SpawnReason.SPAWNER_EGG)
+                ? entity
+                : null;
+        } else {
+            Map<String, Object> entityTag = tag.parseMobTag();
+            entityTag.put("Pos", Arrays.asList(location.getX(), location.getY(), location.getZ()));
+            if (entityTag == null) return null;
+            fixEntityTag(entityTag);
+            EntityType entityType = pocketMob.getEntityType();
+            PocketMobPlugin.getInstance().getLogger()
+                .info((player != null ? player.getName() + " " : "")
+                      + "spawning " + entityType
+                      + " " + location.getBlockX()
+                      + " " + location.getBlockY()
+                      + " " + location.getBlockZ()
+                      + " " + tag.getMobTag());
+            return location.getWorld().spawnEntity(location, entityType, SpawnReason.SPAWNER_EGG, e -> {
+                    Dirty.setEntityTag(e, entityTag);
+                });
+        }
     }
 }
