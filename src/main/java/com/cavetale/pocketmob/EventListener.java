@@ -305,6 +305,10 @@ public final class EventListener implements Listener {
         if (mobType == MobType.BOSS) chance *= 0.025;
         if (random.nextDouble() > chance) return CatchResult.BAD_LUCK;
         if (!eggify(living)) return CatchResult.DENIED;
+        if (player != null) {
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
+                .detail(Detail.ENTITY, living).call();
+        }
         return CatchResult.SUCCESS;
     }
 
