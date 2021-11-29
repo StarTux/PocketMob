@@ -1,6 +1,5 @@
 package com.cavetale.pocketmob;
 
-import com.cavetale.mytems.Mytems;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;

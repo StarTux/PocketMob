@@ -4,15 +4,12 @@ import com.cavetale.dirty.Dirty;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.mytems.item.pocketmob.PocketMobTag;
-import com.cavetale.mytems.util.Json;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 import lombok.NonNull;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -77,7 +74,6 @@ public final class PocketMobs {
     public static PocketMobTag entity2tag(@NonNull Entity entity) {
         PocketMobTag tag = new PocketMobTag();
         tag.serializeMob(entity);
-        tag.setDisplayName(entity.customName());
         return tag;
     }
 
