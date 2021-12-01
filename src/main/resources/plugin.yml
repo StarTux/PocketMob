@@ -6,8 +6,8 @@ description: Capture mob in spawn eggs.
 author: StarTux
 website: https://cavetale.com
 
-depend: [Dirty, WorldMarker, Mytems, Core]
-softdepend: []
+depend: [WorldMarker, Mytems, Core]
+softdepend: [Dirty]
 
 commands:
   pocketmob:

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 import lombok.NonNull;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -166,6 +167,7 @@ public final class PocketMobs {
                 ? entity
                 : null;
         } else {
+            if (!Bukkit.getPluginManager().isPluginEnabled("Dirty")) return null;
             Map<String, Object> entityTag = tag.parseMobTag();
             entityTag.put("Pos", Arrays.asList(location.getX(), location.getY(), location.getZ()));
             if (entityTag == null) return null;
