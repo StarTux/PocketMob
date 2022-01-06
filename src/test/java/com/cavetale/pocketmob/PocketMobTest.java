@@ -15,7 +15,7 @@ public final class PocketMobTest {
 
     @Test
     public void test() throws Exception {
-        //printEntityTypes(System.out);
+        printEntityTypes(System.out);
         dumpEnum(true);
     }
 
