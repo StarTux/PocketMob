@@ -15,6 +15,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
 
@@ -163,6 +165,12 @@ public final class PocketMobs {
         if (tag.getMob() != null) {
             Entity entity = tag.deserializeMob(location.getWorld());
             if (entity == null) return null;
+            if (entity instanceof Villager villager && villager.isSleeping()) {
+                villager.wakeup();
+            }
+            if (player != null && entity instanceof Tameable tameable && tameable.isTamed()) {
+                tameable.setOwner(player);
+            }
             return entity.spawnAt(location, SpawnReason.SPAWNER_EGG)
                 ? entity
                 : null;

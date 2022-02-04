@@ -134,10 +134,6 @@ public final class EventListener implements Listener {
                 if (entity != null) entity.remove();
                 projectile.getWorld().dropItem(projectile.getLocation(), thrownItem);
             }
-            if (player != null && entity instanceof Tameable) {
-                Tameable tameable = (Tameable) entity;
-                tameable.setOwner(player);
-            }
             if (player != null) {
                 PluginPlayerEvent.Name.POCKET_MOB_RELEASE.ultimate(plugin, player)
                     .detail(Detail.ENTITY, entity).call();
