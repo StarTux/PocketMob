@@ -6,7 +6,7 @@ import com.cavetale.core.event.entity.PluginEntityEvent;
 import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
 import com.cavetale.core.event.player.PluginPlayerEvent;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsTag;
+import com.cavetale.mytems.MytemsCategory;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.item.ItemMarker;
@@ -63,7 +63,7 @@ public final class EventListener implements Listener {
             ? (Player) projectile.getShooter()
             : null;
         if (mytems == null) return;
-        if (MytemsTag.MOB_CATCHER.isTagged(mytems)) {
+        if (mytems.category == MytemsCategory.MOB_CATCHERS) {
             event.setCancelled(true);
             projectile.remove();
             switch (mytems) {
@@ -113,7 +113,7 @@ public final class EventListener implements Listener {
                 return;
             }
             }
-        } else if (MytemsTag.POCKET_MOB.isTagged(mytems)) {
+        } else if (mytems.category == MytemsCategory.POCKET_MOB) {
             event.setCancelled(true);
             projectile.remove();
             PocketMob pocketMob = (PocketMob) mytems.getMytem();

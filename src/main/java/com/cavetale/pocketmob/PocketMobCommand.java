@@ -3,6 +3,7 @@ package com.cavetale.pocketmob;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.MytemsCategory;
 import com.cavetale.mytems.MytemsTag;
 import com.cavetale.mytems.item.pocketmob.PocketMobTag;
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
@@ -19,8 +22,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.MerchantRecipe;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 
 @RequiredArgsConstructor
 final class PocketMobCommand implements TabExecutor {
@@ -61,7 +62,7 @@ final class PocketMobCommand implements TabExecutor {
     void openMenu(@NonNull Player player) {
         Merchant merchant = plugin.getServer().createMerchant(Component.text("PocketMob Crafting", PocketMobTag.COLOR_BG));
         ArrayList<MerchantRecipe> recipes = new ArrayList<>();
-        for (Mytems mytems : MytemsTag.MOB_CATCHER.toList()) {
+        for (Mytems mytems : MytemsTag.of(MytemsCategory.MOB_CATCHERS).getMytems()) {
             List<ItemStack> ingredients = new ArrayList<>(2);
             if (mytems != Mytems.MOB_CATCHER) {
                 ingredients.add(Mytems.MOB_CATCHER.createItemStack());
