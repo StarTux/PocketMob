@@ -135,8 +135,8 @@ public final class EventListener implements Listener {
                 projectile.getWorld().dropItem(projectile.getLocation(), thrownItem);
             }
             if (player != null) {
-                PluginPlayerEvent.Name.POCKET_MOB_RELEASE.ultimate(plugin, player)
-                    .detail(Detail.ENTITY, entity).call();
+                PluginPlayerEvent.Name.POCKET_MOB_RELEASE.make(plugin, player)
+                    .detail(Detail.ENTITY, entity).callEvent();
             }
         }
     }
@@ -277,8 +277,8 @@ public final class EventListener implements Listener {
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
         if (!eggify(living)) return CatchResult.DENIED;
         if (player != null) {
-            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
-                .detail(Detail.ENTITY, living).call();
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.make(plugin, player)
+                .detail(Detail.ENTITY, living).callEvent();
         }
         return CatchResult.SUCCESS;
     }
@@ -302,8 +302,8 @@ public final class EventListener implements Listener {
         if (random.nextDouble() > chance) return CatchResult.BAD_LUCK;
         if (!eggify(living)) return CatchResult.DENIED;
         if (player != null) {
-            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
-                .detail(Detail.ENTITY, living).call();
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.make(plugin, player)
+                .detail(Detail.ENTITY, living).callEvent();
         }
         return CatchResult.SUCCESS;
     }
@@ -322,8 +322,8 @@ public final class EventListener implements Listener {
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
         if (!eggify(living)) return CatchResult.DENIED;
         if (player != null) {
-            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
-                .detail(Detail.ENTITY, living).call();
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.make(plugin, player)
+                .detail(Detail.ENTITY, living).callEvent();
         }
         return CatchResult.SUCCESS;
     }
@@ -346,8 +346,8 @@ public final class EventListener implements Listener {
         if (random.nextDouble() > chance) return CatchResult.BAD_LUCK;
         if (!eggify(living)) return CatchResult.DENIED;
         if (player != null) {
-            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
-                .detail(Detail.ENTITY, living).call();
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.make(plugin, player)
+                .detail(Detail.ENTITY, living).callEvent();
         }
         return CatchResult.SUCCESS;
     }
@@ -366,8 +366,8 @@ public final class EventListener implements Listener {
         }
         if (!eggify(living)) return CatchResult.DENIED;
         if (player != null) {
-            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
-                .detail(Detail.ENTITY, living).call();
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.make(plugin, player)
+                .detail(Detail.ENTITY, living).callEvent();
         }
         return CatchResult.SUCCESS;
     }
@@ -385,8 +385,8 @@ public final class EventListener implements Listener {
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
         if (!eggify(living)) return CatchResult.DENIED;
         if (player != null) {
-            PluginPlayerEvent.Name.POCKET_MOB_CATCH.ultimate(plugin, player)
-                .detail(Detail.ENTITY, living).call();
+            PluginPlayerEvent.Name.POCKET_MOB_CATCH.make(plugin, player)
+                .detail(Detail.ENTITY, living).callEvent();
         }
         return CatchResult.SUCCESS;
     }
