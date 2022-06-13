@@ -86,6 +86,7 @@ public enum MobType {
         case TADPOLE:
         case TROPICAL_FISH:
             return MobType.FISH;
+        case ALLAY:
         case AXOLOTL:
         case BAT:
         case BEE:
@@ -118,12 +119,10 @@ public enum MobType {
         case VILLAGER:
         case WANDERING_TRADER:
             return MobType.VILLAGER;
-        case ALLAY:
         case BLAZE:
         case CAVE_SPIDER:
         case CREEPER:
         case DROWNED:
-        case ELDER_GUARDIAN:
         case ENDERMAN:
         case ENDERMITE:
         case EVOKER:
@@ -156,6 +155,7 @@ public enum MobType {
         case ZOMBIE_VILLAGER:
         case ZOMBIFIED_PIGLIN:
             return MobType.MONSTER;
+        case ELDER_GUARDIAN:
         case ENDER_DRAGON:
         case WARDEN:
         case WITHER:
