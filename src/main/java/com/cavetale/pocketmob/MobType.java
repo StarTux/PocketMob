@@ -38,6 +38,7 @@ public enum MobType {
         case ARMOR_STAND:
         case ARROW:
         case BOAT:
+        case CHEST_BOAT:
         case DRAGON_FIREBALL:
         case DROPPED_ITEM:
         case EGG:
@@ -82,6 +83,7 @@ public enum MobType {
         case PUFFERFISH:
         case SALMON:
         case SQUID:
+        case TADPOLE:
         case TROPICAL_FISH:
             return MobType.FISH;
         case AXOLOTL:
@@ -90,6 +92,7 @@ public enum MobType {
         case CHICKEN:
         case COW:
         case FOX:
+        case FROG:
         case GOAT:
         case MUSHROOM_COW:
         case OCELOT:
@@ -115,6 +118,7 @@ public enum MobType {
         case VILLAGER:
         case WANDERING_TRADER:
             return MobType.VILLAGER;
+        case ALLAY:
         case BLAZE:
         case CAVE_SPIDER:
         case CREEPER:
@@ -145,6 +149,7 @@ public enum MobType {
         case STRAY:
         case VEX:
         case VINDICATOR:
+        case WARDEN:
         case WITCH:
         case WITHER_SKELETON:
         case ZOGLIN:
