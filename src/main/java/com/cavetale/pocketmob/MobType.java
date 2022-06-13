@@ -149,7 +149,6 @@ public enum MobType {
         case STRAY:
         case VEX:
         case VINDICATOR:
-        case WARDEN:
         case WITCH:
         case WITHER_SKELETON:
         case ZOGLIN:
@@ -158,6 +157,7 @@ public enum MobType {
         case ZOMBIFIED_PIGLIN:
             return MobType.MONSTER;
         case ENDER_DRAGON:
+        case WARDEN:
         case WITHER:
             return MobType.BOSS;
         default:
