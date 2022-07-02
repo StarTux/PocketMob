@@ -3,6 +3,7 @@ package com.cavetale.pocketmob;
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.core.event.entity.PluginEntityEvent;
+import com.cavetale.core.event.player.PlayerInteractNpcEvent;
 import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
 import com.cavetale.core.event.player.PluginPlayerEvent;
 import com.cavetale.mytems.Mytems;
@@ -389,5 +390,14 @@ public final class EventListener implements Listener {
                 .detail(Detail.ENTITY, living).callEvent();
         }
         return CatchResult.SUCCESS;
+    }
+
+    @EventHandler
+    private void onPlayerInteractNpc(PlayerInteractNpcEvent event) {
+        if (event.getName().equals("PocketMob")) {
+            event.setCancelled(true);
+            plugin.openMenu(event.getPlayer());
+            plugin.getLogger().info("Openinv NPC menu: " + event.getPlayer().getName());
+        }
     }
 }
