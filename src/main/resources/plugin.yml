@@ -7,7 +7,7 @@ author: StarTux
 website: https://cavetale.com
 
 depend: [WorldMarker, Mytems, Core]
-softdepend: [Dirty]
+softdepend: []
 
 commands:
   pocketmob:
