@@ -105,6 +105,7 @@ public enum MobType {
         case STRIDER:
         case TURTLE:
             return MobType.ANIMAL;
+        case CAMEL:
         case CAT:
         case DONKEY:
         case HORSE:
