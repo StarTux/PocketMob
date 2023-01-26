@@ -18,6 +18,7 @@ public final class MobCatcherDelegate implements MobCatcher.Delegate {
 
     @Override
     public void onPlayerRightClick(MobCatcher mobCatcher, PlayerInteractEvent event, Player player, ItemStack item) {
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
         if (!player.hasPermission("pocketmob.catch")) return;
         Vector velocity = player.getLocation().getDirection().normalize();
         Egg projectile = player.launchProjectile(Egg.class, velocity);

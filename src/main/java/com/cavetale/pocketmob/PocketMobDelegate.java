@@ -27,6 +27,7 @@ public final class PocketMobDelegate implements PocketMob.Delegate {
 
     @Override
     public void onPlayerRightClick(PocketMob pocketMob, PlayerInteractEvent event, Player player, ItemStack item) {
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
         if (!player.hasPermission("pocketmob.catch")) return;
         Vector velocity = player.getLocation().getDirection().normalize();
         Egg projectile = player.launchProjectile(Egg.class, velocity);
