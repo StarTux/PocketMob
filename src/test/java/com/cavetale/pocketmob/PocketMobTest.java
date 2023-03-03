@@ -14,8 +14,7 @@ public final class PocketMobTest {
     private static final int CUSTOM_MODEL_DATA = 908301;
     private final List<EntityType> types = new ArrayList<>();
 
-    @Test
-    public void test() throws Exception {
+    public void dump() throws Exception {
         printEntityTypes(System.out);
         makeTypes();
         // System.out.print("\n// Non Living\n\n");
@@ -24,6 +23,21 @@ public final class PocketMobTest {
         dumpTypes();
         System.out.print("\n// Mytems\n\n");
         dumpMytems();
+    }
+
+    @Test
+    public void test() throws Exception {
+        for (EntityType entityType : EntityType.values()) {
+            if (entityType.getEntityClass() == null) continue;
+            final MobType mobType = MobType.mobTypeOf(entityType);
+            final MobType guess;
+            try {
+                guess = MobType.guessMobType(entityType);
+            } catch (IllegalStateException ise) {
+                continue;
+            }
+            assert mobType == guess : entityType + ": " + mobType + " != " + guess;
+        }
     }
 
     private void dumpNonLivingEntities() {

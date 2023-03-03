@@ -7,13 +7,16 @@ import java.util.Set;
 import org.bukkit.entity.Ambient;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Boss;
+import org.bukkit.entity.Enemy;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fish;
+import org.bukkit.entity.Golem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Tameable;
+import org.bukkit.entity.WaterMob;
 
 public enum MobType {
     FISH(.6),
@@ -32,7 +35,7 @@ public enum MobType {
         this.chance = chance;
     }
 
-    private static MobType mobTypeOf(EntityType entityType) {
+    protected static MobType mobTypeOf(EntityType entityType) {
         switch (entityType) {
         case AREA_EFFECT_CLOUD:
         case ARMOR_STAND:
@@ -168,13 +171,19 @@ public enum MobType {
         }
     }
 
-    private static MobType guessMobType(EntityType entityType) {
+    protected static MobType guessMobType(EntityType entityType) {
         Class<?> clazz = entityType.getEntityClass();
         if (clazz == null) {
             throw new IllegalArgumentException("No entity class: " + entityType);
         }
         if (!LivingEntity.class.isAssignableFrom(clazz)) {
             return null;
+        }
+        switch (entityType) {
+        case ELDER_GUARDIAN:
+        case WARDEN:
+            return BOSS;
+        default: break;
         }
         if (Boss.class.isAssignableFrom(clazz)) {
             return MobType.BOSS;
@@ -184,6 +193,12 @@ public enum MobType {
             return MobType.PET;
         } else if (Fish.class.isAssignableFrom(clazz)) {
             return MobType.FISH;
+        } else if (WaterMob.class.isAssignableFrom(clazz)) {
+            return MobType.FISH;
+        } else if (Enemy.class.isAssignableFrom(clazz)) {
+            return MobType.MONSTER;
+        } else if (Golem.class.isAssignableFrom(clazz)) {
+            return MobType.MONSTER;
         } else if (Animals.class.isAssignableFrom(clazz)) {
             return MobType.ANIMAL;
         } else if (NPC.class.isAssignableFrom(clazz)) {
@@ -191,7 +206,7 @@ public enum MobType {
         } else if (Ambient.class.isAssignableFrom(clazz)) {
             return MobType.ANIMAL;
         } else if (Mob.class.isAssignableFrom(clazz)) {
-            return MobType.MONSTER;
+            return MobType.ANIMAL;
         } else {
             throw new IllegalStateException("No type: " + entityType);
         }
