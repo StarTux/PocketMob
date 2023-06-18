@@ -99,8 +99,8 @@ public final class PocketMobTest {
             }
             System.out.println("POCKET_" + type
                                + "("
-                               + "PocketMob::new"
-                               + ", Material." + material
+                               + "PocketMob.class"
+                               + ", " + material
                                + ", " + CUSTOM_MODEL_DATA
                                + ", (char) 0"
                                + ", POCKET_MOB"
