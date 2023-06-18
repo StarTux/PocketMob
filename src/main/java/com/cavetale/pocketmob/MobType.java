@@ -40,6 +40,7 @@ public enum MobType {
         case AREA_EFFECT_CLOUD:
         case ARMOR_STAND:
         case ARROW:
+        case BLOCK_DISPLAY:
         case BOAT:
         case CHEST_BOAT:
         case DRAGON_FIREBALL:
@@ -55,6 +56,8 @@ public enum MobType {
         case FIREWORK:
         case FISHING_HOOK:
         case GLOW_ITEM_FRAME:
+        case INTERACTION:
+        case ITEM_DISPLAY:
         case ITEM_FRAME:
         case LEASH_HITCH:
         case LIGHTNING:
@@ -75,6 +78,7 @@ public enum MobType {
         case SNOWBALL:
         case SPECTRAL_ARROW:
         case SPLASH_POTION:
+        case TEXT_DISPLAY:
         case THROWN_EXP_BOTTLE:
         case TRIDENT:
         case UNKNOWN:
@@ -105,6 +109,7 @@ public enum MobType {
         case POLAR_BEAR:
         case RABBIT:
         case SHEEP:
+        case SNIFFER:
         case STRIDER:
         case TURTLE:
             return MobType.ANIMAL;
