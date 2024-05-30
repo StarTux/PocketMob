@@ -83,6 +83,7 @@ public enum MobType {
         case TRIDENT:
         case UNKNOWN:
         case WITHER_SKULL:
+        case WIND_CHARGE:
             return null;
         case COD:
         case DOLPHIN:
@@ -129,6 +130,7 @@ public enum MobType {
         case WANDERING_TRADER:
             return MobType.VILLAGER;
         case BLAZE:
+        case BREEZE:
         case CAVE_SPIDER:
         case CREEPER:
         case DROWNED:
