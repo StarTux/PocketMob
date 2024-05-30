@@ -4,13 +4,14 @@ import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.core.event.entity.PluginEntityEvent;
 import com.cavetale.core.event.player.PlayerInteractNpcEvent;
-import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
 import com.cavetale.core.event.player.PluginPlayerEvent;
+import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsCategory;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.item.ItemMarker;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
@@ -30,6 +31,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Raider;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.ThrowableProjectile;
 import org.bukkit.event.EventHandler;
@@ -184,6 +186,9 @@ public final class EventListener implements Listener {
         if (entity instanceof EnderDragon) {
             if (((EnderDragon) entity).getPhase() == EnderDragon.Phase.DYING) return false;
         }
+        if (entity instanceof Raider raider && raider.getRaid() != null) {
+            return false;
+        }
         return true;
     }
 
@@ -230,7 +235,8 @@ public final class EventListener implements Listener {
             }
         }
         EntityEquipment equipment = entity.getEquipment();
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
+        for (EquipmentSlot slot : List.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND,
+                                          EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
             ItemStack itemStack = equipment.getItem(slot);
             if (itemStack == null || itemStack.getType() == Material.AIR) continue;
             if (isSimpleItem(itemStack)) continue;
