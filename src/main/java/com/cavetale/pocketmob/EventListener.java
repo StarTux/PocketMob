@@ -17,6 +17,7 @@ import java.util.Random;
 import java.util.UUID;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -71,33 +72,36 @@ public final class EventListener implements Listener {
             projectile.remove();
             switch (mytems) {
             case ANIMAL_CATCHER: {
-                double range = 2.0;
-                int amount = (int) (range * range * range * 8.0 * 4.0);
-                projectile.getWorld().spawnParticle(Particle.SPELL_MOB, projectile.getLocation(), amount, range, range, range, 1);
+                final double range = 2.0;
+                final int amount = (int) (range * range * range * 8.0 * 4.0);
                 for (Entity nearby : projectile.getNearbyEntities(range, range, range)) {
                     CatchResult catchResult = animalCatcher(projectile, nearby, player);
                     catchEffect(projectile.getLocation(), catchResult, null, player);
                 }
+                projectile.getWorld().spawnParticle(Particle.ENTITY_EFFECT, projectile.getLocation(), amount, range, range, range, 1,
+                                                    Color.fromRGB(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
                 return;
             }
             case PET_CATCHER: {
-                double range = 1.5;
-                int amount = (int) (range * range * range * 8.0 * 4.0);
-                projectile.getWorld().spawnParticle(Particle.SPELL_MOB, projectile.getLocation(), amount, range, range, range, 1);
+                final double range = 1.5;
+                final int amount = (int) (range * range * range * 8.0 * 4.0);
                 for (Entity nearby : projectile.getNearbyEntities(range, range, range)) {
                     CatchResult catchResult = petCatcher(projectile, nearby, player);
                     catchEffect(projectile.getLocation(), catchResult, null, player);
                 }
+                projectile.getWorld().spawnParticle(Particle.ENTITY_EFFECT, projectile.getLocation(), amount, range, range, range, 1,
+                                                    Color.fromRGB(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
                 return;
             }
             case FISH_CATCHER: {
                 double range = 3;
                 int amount = (int) (range * range * range * 8.0 * 4.0);
-                projectile.getWorld().spawnParticle(Particle.SPELL_MOB, projectile.getLocation(), amount, range, range, range, 1);
                 for (Entity nearby : projectile.getNearbyEntities(range, range, range)) {
                     CatchResult catchResult = fishCatcher(projectile, nearby, player);
                     catchEffect(projectile.getLocation(), catchResult, null, player);
                 }
+                projectile.getWorld().spawnParticle(Particle.ENTITY_EFFECT, projectile.getLocation(), amount, range, range, range, 1,
+                                                    Color.fromRGB(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
                 return;
             }
             case VILLAGER_CATCHER: {
@@ -155,11 +159,11 @@ public final class EventListener implements Listener {
             break;
         case BAD_LUCK:
             location.getWorld().playSound(location, Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.MASTER, 0.5f, 1.5f);
-            location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 16, 0.5, 0.5, 0.5, 0.0);
+            location.getWorld().spawnParticle(Particle.SMOKE, location, 16, 0.5, 0.5, 0.5, 0.0);
             break;
         case SUCCESS:
             location.getWorld().playSound(location, Sound.BLOCK_ANVIL_LAND, SoundCategory.MASTER, 0.5f, 1.6f);
-            location.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, location, 16, 0.5, 0.5, 0.5, 0.0);
+            location.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, location, 16, 0.5, 0.5, 0.5, 0.0);
         default: break;
         }
     }

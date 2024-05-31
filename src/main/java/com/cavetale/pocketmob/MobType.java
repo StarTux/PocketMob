@@ -35,56 +35,61 @@ public enum MobType {
         this.chance = chance;
     }
 
-    protected static MobType mobTypeOf(EntityType entityType) {
+    public static MobType mobTypeOf(EntityType entityType) {
         switch (entityType) {
+
         case AREA_EFFECT_CLOUD:
         case ARMOR_STAND:
         case ARROW:
         case BLOCK_DISPLAY:
         case BOAT:
+        case BREEZE_WIND_CHARGE:
         case CHEST_BOAT:
+        case CHEST_MINECART:
+        case COMMAND_BLOCK_MINECART:
         case DRAGON_FIREBALL:
-        case DROPPED_ITEM:
         case EGG:
-        case ENDER_CRYSTAL:
         case ENDER_PEARL:
-        case ENDER_SIGNAL:
+        case END_CRYSTAL:
         case EVOKER_FANGS:
+        case EXPERIENCE_BOTTLE:
         case EXPERIENCE_ORB:
+        case EYE_OF_ENDER:
         case FALLING_BLOCK:
         case FIREBALL:
-        case FIREWORK:
-        case FISHING_HOOK:
+        case FIREWORK_ROCKET:
+        case FISHING_BOBBER:
+        case FURNACE_MINECART:
         case GLOW_ITEM_FRAME:
+        case HOPPER_MINECART:
         case INTERACTION:
+        case ITEM:
         case ITEM_DISPLAY:
         case ITEM_FRAME:
-        case LEASH_HITCH:
-        case LIGHTNING:
+        case LEASH_KNOT:
+        case LIGHTNING_BOLT:
         case LLAMA_SPIT:
         case MARKER:
         case MINECART:
-        case MINECART_CHEST:
-        case MINECART_COMMAND:
-        case MINECART_FURNACE:
-        case MINECART_HOPPER:
-        case MINECART_MOB_SPAWNER:
-        case MINECART_TNT:
+        case OMINOUS_ITEM_SPAWNER:
         case PAINTING:
         case PLAYER:
-        case PRIMED_TNT:
+        case POTION:
         case SHULKER_BULLET:
         case SMALL_FIREBALL:
         case SNOWBALL:
+        case SPAWNER_MINECART:
         case SPECTRAL_ARROW:
-        case SPLASH_POTION:
         case TEXT_DISPLAY:
-        case THROWN_EXP_BOTTLE:
+        case TNT:
+        case TNT_MINECART:
         case TRIDENT:
         case UNKNOWN:
-        case WITHER_SKULL:
         case WIND_CHARGE:
+        case WITHER_SKULL:
+
             return null;
+
         case COD:
         case DOLPHIN:
         case GLOW_SQUID:
@@ -93,8 +98,11 @@ public enum MobType {
         case SQUID:
         case TADPOLE:
         case TROPICAL_FISH:
+
             return MobType.FISH;
+
         case ALLAY:
+        case ARMADILLO:
         case AXOLOTL:
         case BAT:
         case BEE:
@@ -103,7 +111,7 @@ public enum MobType {
         case FOX:
         case FROG:
         case GOAT:
-        case MUSHROOM_COW:
+        case MOOSHROOM:
         case OCELOT:
         case PANDA:
         case PIG:
@@ -113,7 +121,9 @@ public enum MobType {
         case SNIFFER:
         case STRIDER:
         case TURTLE:
+
             return MobType.ANIMAL;
+
         case CAMEL:
         case CAT:
         case DONKEY:
@@ -125,11 +135,16 @@ public enum MobType {
         case TRADER_LLAMA:
         case WOLF:
         case ZOMBIE_HORSE:
+
             return MobType.PET;
+
         case VILLAGER:
         case WANDERING_TRADER:
+
             return MobType.VILLAGER;
+
         case BLAZE:
+        case BOGGED:
         case BREEZE:
         case CAVE_SPIDER:
         case CREEPER:
@@ -154,7 +169,7 @@ public enum MobType {
         case SILVERFISH:
         case SKELETON:
         case SLIME:
-        case SNOWMAN:
+        case SNOW_GOLEM:
         case SPIDER:
         case STRAY:
         case VEX:
@@ -165,12 +180,16 @@ public enum MobType {
         case ZOMBIE:
         case ZOMBIE_VILLAGER:
         case ZOMBIFIED_PIGLIN:
+
             return MobType.MONSTER;
+
         case ELDER_GUARDIAN:
         case ENDER_DRAGON:
         case WARDEN:
         case WITHER:
+
             return MobType.BOSS;
+
         default:
             MobType result = guessMobType(entityType);
             System.err.println("Guessed mob type: " + entityType + " => " + result);

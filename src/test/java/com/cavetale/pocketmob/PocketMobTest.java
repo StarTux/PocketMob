@@ -8,21 +8,22 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.junit.Assert;
 import org.junit.Test;
 
 public final class PocketMobTest {
     private static final int CUSTOM_MODEL_DATA = 908301;
     private final List<EntityType> types = new ArrayList<>();
 
-    public void dump() throws Exception {
-        printEntityTypes(System.out);
+    /**
+     * This is used to update the Mytems enum every update.
+     */
+    public void dump() {
         makeTypes();
-        // System.out.print("\n// Non Living\n\n");
-        // dumpNonLivingEntities();
-        System.out.print("\n// Types\n\n");
-        dumpTypes();
-        System.out.print("\n// Mytems\n\n");
+        System.out.println("\ncom.cavetale.mytems.Mytems\n");
         dumpMytems();
+        System.out.println("\ncom.cavetale.mytems.item.pocketmob.PocketMobType\n");
+        dumpPocketMobTypes();
     }
 
     @Test
@@ -36,7 +37,7 @@ public final class PocketMobTest {
             } catch (IllegalStateException ise) {
                 continue;
             }
-            assert mobType == guess : entityType + ": " + mobType + " != " + guess;
+            Assert.assertTrue(entityType + ": " + mobType + " != " + guess, mobType == guess);
         }
     }
 
@@ -70,34 +71,26 @@ public final class PocketMobTest {
     }
 
     private void makeTypes() {
-        for (EntityType ent : EntityType.values()) {
-            switch (ent) {
-            case ARMOR_STAND:
-            case PLAYER:
-            case UNKNOWN:
-                continue;
-            default:
-                break;
-            }
-            Class<?> clazz = ent.getEntityClass();
-            if (clazz == null) continue;
-            if (!LivingEntity.class.isAssignableFrom(clazz)) continue;
-            types.add(ent);
+        for (EntityType entityType : EntityType.values()) {
+            final MobType mobType = MobType.mobTypeOf(entityType);
+            if (mobType == null) continue;
+            types.add(entityType);
         }
         Collections.sort(types, (a, b) -> a.name().compareTo(b.name()));
     }
 
-    private void dumpTypes() {
-        for (int i = 0; i < types.size(); i += 1) {
-            EntityType type = types.get(i);
+    private void dumpMytems() {
+        for (EntityType entityType : types) {
+            final MobType mobType = MobType.mobTypeOf(entityType);
+            if (mobType == null) continue;
             Material material;
             try {
-                material = Material.valueOf(type.name() + "_SPAWN_EGG");
+                material = Material.valueOf(entityType.name() + "_SPAWN_EGG");
             } catch (IllegalArgumentException iae) {
                 System.out.println("// Irregular");
-                material = getIrregularSpawnEgg(type);
+                material = getIrregularSpawnEgg(entityType);
             }
-            System.out.println("POCKET_" + type
+            System.out.println("POCKET_" + entityType
                                + "("
                                + "PocketMob.class"
                                + ", " + material
@@ -108,13 +101,14 @@ public final class PocketMobTest {
         }
     }
 
-    private void dumpMytems() {
-        for (int i = 0; i < types.size(); i += 1) {
-            EntityType type = types.get(i);
-            System.out.println(type
+    private void dumpPocketMobTypes() {
+        for (EntityType entityType : types) {
+            final MobType mobType = MobType.mobTypeOf(entityType);
+            if (mobType == null) continue;
+            System.out.println(entityType
                                + "("
-                               + "Mytems." + "POCKET_" + type
-                               + ", EntityType." + type
+                               + "Mytems." + "POCKET_" + entityType
+                               + ", EntityType." + entityType
                                + "),");
         }
     }
@@ -125,16 +119,6 @@ public final class PocketMobTest {
             return Material.VINDICATOR_SPAWN_EGG;
         case GIANT:
             return Material.ZOMBIE_SPAWN_EGG;
-        case ENDER_DRAGON:
-            return Material.ENDERMAN_SPAWN_EGG;
-        case WITHER:
-            return Material.WITHER_SKELETON_SPAWN_EGG;
-        case MUSHROOM_COW:
-            return Material.MOOSHROOM_SPAWN_EGG;
-        case SNOWMAN:
-            return Material.POLAR_BEAR_SPAWN_EGG;
-        case IRON_GOLEM:
-            return Material.WOLF_SPAWN_EGG;
         default:
             throw new IllegalStateException("No egg: " + type);
         }

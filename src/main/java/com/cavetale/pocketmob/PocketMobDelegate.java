@@ -68,6 +68,6 @@ public final class PocketMobDelegate implements PocketMob.Delegate {
         EntityMarker.setId(projectile, pocketMob.getKey().id);
         itemStack.subtract(1);
         dropAt.getWorld().playSound(dropAt, Sound.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS, 0.5f, 1.0f);
-        dropAt.getWorld().spawnParticle(Particle.SMOKE_NORMAL, dropAt, 4, 0, 0, 0, 0.075);
+        dropAt.getWorld().spawnParticle(Particle.SMOKE, dropAt, 4, 0, 0, 0, 0.075);
     }
 }
