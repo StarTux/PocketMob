@@ -18,6 +18,7 @@ public final class PocketMobTest {
     /**
      * This is used to update the Mytems enum every update.
      */
+    @Test
     public void dump() {
         makeTypes();
         System.out.println("\ncom.cavetale.mytems.Mytems\n");
