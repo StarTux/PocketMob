@@ -26,13 +26,13 @@ public final class PocketMobs {
     public static ItemStack entity2item(@NonNull Entity entity, @NonNull Mytems mytems) {
         ItemStack itemStack = mytems.createItemStack();
         PocketMobTag tag = entity2tag(entity);
-        tag.store(itemStack, (PocketMob) mytems.getMytem());
+        tag.store(mytems, itemStack);
         return itemStack;
     }
 
     public static Entity item2entity(Location location, ItemStack itemStack, PocketMob pocketMob, @Nullable Player player) {
         PocketMobTag tag = new PocketMobTag();
-        tag.load(itemStack, pocketMob);
+        tag.load(pocketMob.getKey(), itemStack);
         if (tag.getMob() == null) {
             return location.getWorld().spawnEntity(location, pocketMob.getEntityType(), SPAWNER_EGG);
         }
