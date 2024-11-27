@@ -38,13 +38,34 @@ public enum MobType {
     public static MobType mobTypeOf(EntityType entityType) {
         switch (entityType) {
 
+        case CREAKING_TRANSIENT:
+
+        case ACACIA_BOAT:
+        case ACACIA_CHEST_BOAT:
+        case BAMBOO_CHEST_RAFT:
+        case BAMBOO_RAFT:
+        case BIRCH_BOAT:
+        case BIRCH_CHEST_BOAT:
+        case CHERRY_BOAT:
+        case CHERRY_CHEST_BOAT:
+        case DARK_OAK_BOAT:
+        case DARK_OAK_CHEST_BOAT:
+        case JUNGLE_BOAT:
+        case JUNGLE_CHEST_BOAT:
+        case MANGROVE_BOAT:
+        case MANGROVE_CHEST_BOAT:
+        case OAK_BOAT:
+        case OAK_CHEST_BOAT:
+        case PALE_OAK_BOAT:
+        case PALE_OAK_CHEST_BOAT:
+        case SPRUCE_BOAT:
+        case SPRUCE_CHEST_BOAT:
+
         case AREA_EFFECT_CLOUD:
         case ARMOR_STAND:
         case ARROW:
         case BLOCK_DISPLAY:
-        case BOAT:
         case BREEZE_WIND_CHARGE:
-        case CHEST_BOAT:
         case CHEST_MINECART:
         case COMMAND_BLOCK_MINECART:
         case DRAGON_FIREBALL:
@@ -147,6 +168,7 @@ public enum MobType {
         case BOGGED:
         case BREEZE:
         case CAVE_SPIDER:
+        case CREAKING:
         case CREEPER:
         case DROWNED:
         case ENDERMAN:
@@ -206,6 +228,8 @@ public enum MobType {
             return null;
         }
         switch (entityType) {
+        case CREAKING_TRANSIENT:
+            return null;
         case ELDER_GUARDIAN:
         case WARDEN:
             return BOSS;

@@ -306,7 +306,7 @@ public final class EventListener implements Listener {
         MobType mobType = MobType.ENTITY_MOB_MAP.get(living.getType());
         if (mobType != MobType.MONSTER && mobType != MobType.BOSS) return CatchResult.UNCATCHABLE;
         if (player != null && !runPlayerChecks(player, living)) return CatchResult.UNCATCHABLE;
-        double maxHealth = living.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        double maxHealth = living.getAttribute(Attribute.MAX_HEALTH).getValue();
         double health = living.getHealth();
         double chance = Math.min(0.95, mobType.chance + (1.0 - (health / maxHealth)));
         if (mobType == MobType.BOSS) chance *= 0.025;
