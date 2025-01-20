@@ -38,8 +38,6 @@ public enum MobType {
     public static MobType mobTypeOf(EntityType entityType) {
         switch (entityType) {
 
-        case CREAKING_TRANSIENT:
-
         case ACACIA_BOAT:
         case ACACIA_CHEST_BOAT:
         case BAMBOO_CHEST_RAFT:
@@ -228,8 +226,6 @@ public enum MobType {
             return null;
         }
         switch (entityType) {
-        case CREAKING_TRANSIENT:
-            return null;
         case ELDER_GUARDIAN:
         case WARDEN:
             return BOSS;

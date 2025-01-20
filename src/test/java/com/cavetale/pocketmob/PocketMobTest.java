@@ -106,10 +106,13 @@ public final class PocketMobTest {
         for (EntityType entityType : types) {
             final MobType mobType = MobType.mobTypeOf(entityType);
             if (mobType == null) continue;
+            final SpawnEggColor seg = SpawnEggColor.valueOf(entityType.name());
             System.out.println(entityType
                                + "("
                                + "Mytems." + "POCKET_" + entityType
                                + ", EntityType." + entityType
+                               + ", 0x" + Integer.toHexString(seg.layer0)
+                               + ", 0x" + Integer.toHexString(seg.layer1)
                                + "),");
         }
     }
