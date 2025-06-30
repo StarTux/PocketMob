@@ -87,18 +87,19 @@ public enum MobType {
         case ITEM_FRAME:
         case LEASH_KNOT:
         case LIGHTNING_BOLT:
+        case LINGERING_POTION:
         case LLAMA_SPIT:
         case MARKER:
         case MINECART:
         case OMINOUS_ITEM_SPAWNER:
         case PAINTING:
         case PLAYER:
-        case POTION:
         case SHULKER_BULLET:
         case SMALL_FIREBALL:
         case SNOWBALL:
         case SPAWNER_MINECART:
         case SPECTRAL_ARROW:
+        case SPLASH_POTION:
         case TEXT_DISPLAY:
         case TNT:
         case TNT_MINECART:
@@ -130,6 +131,7 @@ public enum MobType {
         case FOX:
         case FROG:
         case GOAT:
+        case HAPPY_GHAST:
         case MOOSHROOM:
         case OCELOT:
         case PANDA:
