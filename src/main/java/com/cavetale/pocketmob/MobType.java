@@ -89,6 +89,7 @@ public enum MobType {
         case LIGHTNING_BOLT:
         case LINGERING_POTION:
         case LLAMA_SPIT:
+        case MANNEQUIN:
         case MARKER:
         case MINECART:
         case OMINOUS_ITEM_SPAWNER:
@@ -168,6 +169,7 @@ public enum MobType {
         case BOGGED:
         case BREEZE:
         case CAVE_SPIDER:
+        case COPPER_GOLEM:
         case CREAKING:
         case CREEPER:
         case DROWNED:
