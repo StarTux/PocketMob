@@ -147,16 +147,19 @@ public enum MobType {
             return MobType.ANIMAL;
 
         case CAMEL:
+        case CAMEL_HUSK:
         case CAT:
         case DONKEY:
         case HORSE:
         case LLAMA:
         case MULE:
+        case NAUTILUS:
         case PARROT:
         case SKELETON_HORSE:
         case TRADER_LLAMA:
         case WOLF:
         case ZOMBIE_HORSE:
+        case ZOMBIE_NAUTILUS:
 
             return MobType.PET;
 
@@ -184,6 +187,7 @@ public enum MobType {
         case ILLUSIONER:
         case IRON_GOLEM:
         case MAGMA_CUBE:
+        case PARCHED:
         case PHANTOM:
         case PIGLIN:
         case PIGLIN_BRUTE:
