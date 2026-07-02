@@ -3,7 +3,6 @@ package com.cavetale.pocketmob;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.mytems.item.pocketmob.PocketMobTag;
-import javax.annotation.Nullable;
 import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -30,7 +29,7 @@ public final class PocketMobs {
         return itemStack;
     }
 
-    public static Entity item2entity(Location location, ItemStack itemStack, PocketMob pocketMob, @Nullable Player player) {
+    public static Entity item2entity(Location location, ItemStack itemStack, PocketMob pocketMob, Player player) {
         PocketMobTag tag = new PocketMobTag();
         tag.load(pocketMob.getKey(), itemStack);
         if (tag.getMob() == null) {
