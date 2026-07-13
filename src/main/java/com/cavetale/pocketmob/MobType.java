@@ -142,6 +142,7 @@ public enum MobType {
         case SHEEP:
         case SNIFFER:
         case STRIDER:
+        case SULFUR_CUBE:
         case TURTLE:
 
             return MobType.ANIMAL;

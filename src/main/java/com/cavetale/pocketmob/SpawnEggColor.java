@@ -99,6 +99,7 @@ public enum SpawnEggColor {
     ZOMBIE_NAUTILUS(0x00AAAA, 0x55FFFF),
     ZOMBIE_VILLAGER(0x563C33, 0x799C65),
     ZOMBIFIED_PIGLIN(0xEA9393, 0x4C7129),
+    SULFUR_CUBE(0xe9f9c3, 0x7f7655),
     ;
 
     public final int layer0;
